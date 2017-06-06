@@ -83,7 +83,8 @@ constant returns [Formula f]
     }
     |   StringLiteral
     {
-        $f = new Variable($StringLiteral.text);
+        String name = $StringLiteral.text;
+        $f = new Variable(name.substring(1, name.length() - 1));
     }
     ;
 
