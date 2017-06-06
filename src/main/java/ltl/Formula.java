@@ -3,7 +3,7 @@ package ltl;
 public abstract class Formula {
     /**
      * Transforms formulae to the negative normal form
-     * @param negation if true than we transform negation of the formula
+     * @param negation if true then we transform negation of the formula
      * @return transformed formula
      */
     public abstract Formula toNormalForm(boolean negation);
