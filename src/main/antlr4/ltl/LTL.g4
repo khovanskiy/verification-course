@@ -1,5 +1,9 @@
 grammar LTL;
 
+@header{
+    import static ltl.BinaryOperation.*;
+}
+
 ltl returns [Formula f]
     :   'X' ltl
     {
@@ -22,11 +26,11 @@ ltl returns [Formula f]
 binary returns [Formula f]
     :   l=binary 'U' r=binary
     {
-        $f = new Until($l.f, $r.f);
+        $f = new BinaryFormula(U, $l.f, $r.f);
     }
     |   l=binary 'R' r=binary
     {
-        $f = new Release($l.f, $r.f);
+        $f = new BinaryFormula(R, $l.f, $r.f);
     }
     |   prop
     {
@@ -37,11 +41,11 @@ binary returns [Formula f]
 prop returns [Formula f]
     :   l=prop '&' r=prop
     {
-        $f = LTL.and($l.f, $r.f);
+        $f = new BinaryFormula(AND, $l.f, $r.f);
     }
     |   l=prop '|' r=prop
     {
-        $f = new Or($l.f, $r.f);
+        $f = new BinaryFormula(OR, $l.f, $r.f);
     }
     |   <assoc=right> l=prop '->' r=prop
     {
@@ -88,8 +92,8 @@ constant returns [Formula f]
     }
     ;
 
-OR      :   '|'     ;
-AND     :   '&'     ;
+DIS      :   '|'     ;
+CON     :   '&'     ;
 NOT     :   '!'     ;
 IMPL    :   '->'    ;
 EQ      :   '<->'   ;
