@@ -14,7 +14,8 @@ import static java.util.Arrays.asList;
 @Slf4j
 public class AutomatonTest {
     @Test
-    public void simpleTest(){
+    public void loopTest(){
+        log.info("loop test");
         Automaton<String> a = new Automaton<>(1);
         List<String> path = new ArrayList<>();
         a.addTransition(0, 0, "a");
@@ -27,6 +28,7 @@ public class AutomatonTest {
 
     @Test
     public void tailedPathTest(){
+        log.info("lasso test");
         int n = 10;
         Automaton<Integer> a = new Automaton<>(n + 1);
         for(int i = 0; i < n - 1; i++){
