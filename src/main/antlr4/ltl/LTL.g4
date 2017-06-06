@@ -92,6 +92,7 @@ OR      :   '|'     ;
 AND     :   '&'     ;
 NOT     :   '!'     ;
 IMPL    :   '->'    ;
+EQ      :   '<->'   ;
 UNTIL   :   'U'     ;
 RELEASE :   'R'     ;
 NEXT    :   'X'     ;
