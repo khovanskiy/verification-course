@@ -92,7 +92,7 @@ constant returns [Formula f]
     }
     ;
 
-DIS      :   '|'     ;
+DIS     :   '|'     ;
 CON     :   '&'     ;
 NOT     :   '!'     ;
 IMPL    :   '->'    ;
