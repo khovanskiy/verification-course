@@ -14,16 +14,14 @@ import static java.util.Arrays.asList;
 @Slf4j
 public class AutomatonTest {
     @Test
-    public void loopTest(){
+    public void loopPathTest(){
         log.info("loop test");
         Automaton<String> a = new Automaton<>(1);
-        List<String> path = new ArrayList<>();
         a.addTransition(0, 0, "a");
-        a.findAWord().forEachRemaining(path::add);
-        Assert.assertEquals(0, path.size());
+        Assert.assertTrue(a.findAWord().isEmpty());
+
         a.setAccepting(0);
-        a.findAWord().forEachRemaining(path::add);
-        Assert.assertEquals(asList("a"), path);
+        Assert.assertEquals(asList("a"), new ArrayList<>(a.findAWord()));
     }
 
     @Test
@@ -36,12 +34,36 @@ public class AutomatonTest {
         }
         a.addTransition(n - 1, n / 2, n - 1);
         a.setAccepting(n / 2 - 1);
-        List<Integer> path = new ArrayList<>();
-        a.findAWord().forEachRemaining(path::add);
-        Assert.assertEquals(0, path.size());
-        a.setAccepting(n / 2 + 1);
-        a.findAWord().forEachRemaining(path::add);
-        Assert.assertEquals(IntStream.range(0, n).boxed().collect(Collectors.toList()), path);
+        Assert.assertTrue(a.findAWord().isEmpty());
 
+        a.setAccepting(n / 2 + 1);
+        List<Integer> ref = IntStream.range(0, n).boxed().collect(Collectors.toList());
+        Assert.assertEquals(ref, new ArrayList<>(a.findAWord()));
+    }
+
+    @Test
+    public void simpleIntersectionTest(){
+        log.info("intersection test");
+        int an = 2;
+        int bn = 4;
+        Automaton<Integer> a = new Automaton<>(an);
+        Automaton<Integer> b = new Automaton<>(bn);
+        a.addTransition(0, 1, 0);
+        a.addTransition(1, 0, 1);
+
+        int curr = 0;
+        for(int i = 0; i < bn - 1; i++){
+            b.addTransition(i, i + 1, curr);
+            curr = 1 - curr;
+        }
+        b.addTransition(3, 0, 1);
+
+        a.setAccepting(0);
+        b.setAccepting(1);
+
+        Automaton<Integer> c = Automaton.intersect(a, b);
+        List<Integer> path = new ArrayList<>(c.findAWord());
+        List<Integer> ref = IntStream.iterate(1, i -> i % 2).limit(path.size()).boxed().collect(Collectors.toList());
+        Assert.assertEquals(path, ref);
     }
 }

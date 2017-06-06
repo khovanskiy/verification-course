@@ -81,13 +81,13 @@ public class Automaton<T> {
         return c;
     }
 
-    public Iterator<T> findAWord(){
+    public Collection<T> findAWord(){
         int n = size();
         int[] color1 = new int[n];
         int[] color2 = new int[n];
         Deque<T> path = new ArrayDeque<>();
         dfs1(0, color1, color2, path);
-        return path.descendingIterator();
+        return path;
     }
 
     private boolean dfs1(int v, int[] color1, int[] color2, Deque<T> path) {
@@ -95,11 +95,11 @@ public class Automaton<T> {
         for(T symbol : automaton.get(v).keySet()) {
             for (int u : automaton.get(v).get(symbol)) {
                 if (color1[u] == 0) {
-                    path.push(symbol);
+                    path.addLast(symbol);
                     if (dfs1(u, color1, color2, path)) {
                         return true;
                     }
-                    path.pop();
+                    path.removeLast();
                 }
             }
         }
@@ -117,15 +117,15 @@ public class Automaton<T> {
         for(T symbol : automaton.get(v).keySet()){
             for(int u : automaton.get(v).get(symbol)){
                 if(color1[u] == 1){
-                    path.push(symbol);
+                    path.addLast(symbol);
                     return true;
                 }
                 if(color2[u] == 0){
-                    path.push(symbol);
+                    path.addLast(symbol);
                     if(dfs2(u, color1, color2, path)){
                         return true;
                     }
-                    path.pop();
+                    path.removeLast();
                 }
             }
         }
