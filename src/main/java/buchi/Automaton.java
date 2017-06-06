@@ -2,6 +2,11 @@ package buchi;
 
 import java.util.*;
 
+/**
+ * An implementation of the nondeterministic Buchi automata. States here are just numbers from 0 to n - 1,
+ * where n - the size of the automaton. State 0 is the initial state.
+ * @param <T> type of the alphabet
+ */
 public class Automaton<T> {
     private List<Map<T, List<Integer>>> automaton;
     private Set<Integer> acceptingSet;
