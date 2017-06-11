@@ -1,0 +1,631 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<diagram>
+  <name>Parser</name>
+  <data>
+    <Statemachine>
+      <event name="Stateflow" comment="We see word &quot;Stateflow&quot;" />
+      <event name="word" comment="We see a word" />
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <event name="machine" comment="We see a word &quot;machine&quot;" />
+      <event name="chart" comment="We see the word &quot;chart&quot;" />
+      <event name="close_curl_br" comment="" />
+      <event name="subviewS" comment="We see the word &quot;subviewS&quot;" />
+      <event name="state" comment="We see a keyword &quot;state&quot;" />
+      <event name="data" comment="We see a keyword &quot;data&quot;" />
+      <event name="transition" comment="We see a keyword &quot;transition&quot;" />
+      <event name="props" comment="We see the keyword &quot;props&quot;" />
+      <event name="array" comment="We see the keyword &quot;array&quot;" />
+      <event name="src" comment="We see the keyword &quot;src&quot;" />
+      <event name="dst" comment="We see the keyword &quot;dst&quot;" />
+      <event name="slide" comment="We see the word &quot;slide&quot;" />
+      <event name="size" comment="We see the keyword &quot;size&quot;" />
+      <autoreject>False</autoreject>
+    </Statemachine>
+  </data>
+  <widget id="0" type="State">
+    <attributes>
+      <name>state0</name>
+      <type>1</type>
+      <incoming id="3" />
+      <outgoing id="2" />
+    </attributes>
+  </widget>
+  <widget id="3" type="Transition">
+    <attributes>
+      <event name="*" comment="No event" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="2" type="Transition">
+    <attributes>
+      <event name="Stateflow" comment="We see word &quot;Stateflow&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="1" type="State">
+    <attributes>
+      <name>state1</name>
+      <type>0</type>
+      <incoming id="2" />
+      <outgoing id="3" />
+      <outgoing id="5" />
+    </attributes>
+  </widget>
+  <widget id="5" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="4" type="State">
+    <attributes>
+      <name>PrefixFound</name>
+      <type>0</type>
+      <incoming id="5" />
+      <incoming id="14" />
+      <incoming id="15" />
+      <incoming id="23" />
+      <incoming id="28" />
+      <incoming id="33" />
+      <outgoing id="7" />
+      <outgoing id="11" />
+      <outgoing id="20" />
+      <outgoing id="25" />
+      <outgoing id="31" />
+    </attributes>
+  </widget>
+  <widget id="14" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="15" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <action name="AddFSM" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="23" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <action name="AddState" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="28" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <action name="AddVariable" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="33" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <action name="AddTransition" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="7" type="Transition">
+    <attributes>
+      <event name="machine" comment="We see a word &quot;machine&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="11" type="Transition">
+    <attributes>
+      <event name="chart" comment="We see the word &quot;chart&quot;" />
+      <action name="CreateNewFSM" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="20" type="Transition">
+    <attributes>
+      <event name="state" comment="We see a keyword &quot;state&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="25" type="Transition">
+    <attributes>
+      <event name="data" comment="We see a keyword &quot;data&quot;" />
+      <action name="ResetVariable" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="31" type="Transition">
+    <attributes>
+      <event name="transition" comment="We see a keyword &quot;transition&quot;" />
+      <action name="CreateNewTransition" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="6" type="State">
+    <attributes>
+      <name>Project</name>
+      <type>0</type>
+      <incoming id="7" />
+      <outgoing id="9" />
+    </attributes>
+  </widget>
+  <widget id="9" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="8" type="State">
+    <attributes>
+      <name>Project1</name>
+      <type>0</type>
+      <incoming id="9" />
+      <outgoing id="14" />
+    </attributes>
+  </widget>
+  <widget id="10" type="State">
+    <attributes>
+      <name>Diagram</name>
+      <type>0</type>
+      <incoming id="11" />
+      <outgoing id="13" />
+    </attributes>
+  </widget>
+  <widget id="13" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="12" type="State">
+    <attributes>
+      <name>Diagram1</name>
+      <type>0</type>
+      <incoming id="13" />
+      <incoming id="18" />
+      <outgoing id="15" />
+      <outgoing id="17" />
+      <nested type="AChart" name="dgr" />
+    </attributes>
+  </widget>
+  <widget id="18" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="17" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="16" type="State">
+    <attributes>
+      <name>NestedBrackets</name>
+      <type>0</type>
+      <incoming id="17" />
+      <outgoing id="18" />
+    </attributes>
+  </widget>
+  <widget id="19" type="State">
+    <attributes>
+      <name>SState</name>
+      <type>0</type>
+      <incoming id="20" />
+      <outgoing id="22" />
+    </attributes>
+  </widget>
+  <widget id="22" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <action name="CreateNewState" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="21" type="State">
+    <attributes>
+      <name>SState1</name>
+      <type>0</type>
+      <incoming id="22" />
+      <outgoing id="23" />
+      <nested type="AState" name="astate" />
+    </attributes>
+  </widget>
+  <widget id="24" type="State">
+    <attributes>
+      <name>SVariable</name>
+      <type>0</type>
+      <incoming id="25" />
+      <outgoing id="27" />
+    </attributes>
+  </widget>
+  <widget id="27" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="26" type="State">
+    <attributes>
+      <name>SVariable1</name>
+      <type>0</type>
+      <incoming id="27" />
+      <incoming id="73" />
+      <outgoing id="28" />
+      <outgoing id="36" />
+      <nested type="AVariable" name="avariable" />
+    </attributes>
+  </widget>
+  <widget id="73" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="36" type="Transition">
+    <attributes>
+      <event name="props" comment="We see the keyword &quot;props&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="29" type="State">
+    <attributes>
+      <name>STransition</name>
+      <type>0</type>
+      <incoming id="31" />
+      <outgoing id="32" />
+    </attributes>
+  </widget>
+  <widget id="32" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="30" type="State">
+    <attributes>
+      <name>STransition1</name>
+      <type>0</type>
+      <incoming id="32" />
+      <incoming id="48" />
+      <incoming id="57" />
+      <incoming id="60" />
+      <incoming id="74" />
+      <incoming id="75" />
+      <outgoing id="33" />
+      <outgoing id="41" />
+      <outgoing id="50" />
+      <outgoing id="59" />
+      <nested type="ATransition" name="atransition" />
+    </attributes>
+  </widget>
+  <widget id="48" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="57" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="60" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="74" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="75" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="41" type="Transition">
+    <attributes>
+      <event name="src" comment="We see the keyword &quot;src&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="50" type="Transition">
+    <attributes>
+      <event name="dst" comment="We see the keyword &quot;dst&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="59" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="34" type="State">
+    <attributes>
+      <name>VarProps</name>
+      <type>0</type>
+      <incoming id="36" />
+      <outgoing id="38" />
+    </attributes>
+  </widget>
+  <widget id="38" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="35" type="State">
+    <attributes>
+      <name>SArray</name>
+      <type>0</type>
+      <incoming id="39" />
+      <outgoing id="62" />
+    </attributes>
+  </widget>
+  <widget id="39" type="Transition">
+    <attributes>
+      <event name="array" comment="We see the keyword &quot;array&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="62" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="37" type="State">
+    <attributes>
+      <name>state37</name>
+      <type>0</type>
+      <incoming id="38" />
+      <incoming id="69" />
+      <incoming id="72" />
+      <outgoing id="39" />
+      <outgoing id="71" />
+      <outgoing id="73" />
+    </attributes>
+  </widget>
+  <widget id="69" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="72" type="Transition">
+    <attributes>
+      <event name="close_curl_br" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="71" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="40" type="State">
+    <attributes>
+      <name>SSrc</name>
+      <type>0</type>
+      <incoming id="41" />
+      <outgoing id="43" />
+    </attributes>
+  </widget>
+  <widget id="43" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="42" type="State">
+    <attributes>
+      <name>SSrc1</name>
+      <type>0</type>
+      <incoming id="43" />
+      <outgoing id="45" />
+      <outgoing id="74" />
+    </attributes>
+  </widget>
+  <widget id="45" type="Transition">
+    <attributes>
+      <event name="id" comment="We see the word &quot;id&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="44" type="State">
+    <attributes>
+      <name>Src_ID</name>
+      <type>0</type>
+      <incoming id="45" />
+      <outgoing id="47" />
+    </attributes>
+  </widget>
+  <widget id="47" type="Transition">
+    <attributes>
+      <event name="number" comment="" />
+      <action name="SetTransBegin" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="46" type="State">
+    <attributes>
+      <name>Src_ID1</name>
+      <type>0</type>
+      <incoming id="47" />
+      <outgoing id="48" />
+    </attributes>
+  </widget>
+  <widget id="49" type="State">
+    <attributes>
+      <name>SDst</name>
+      <type>0</type>
+      <incoming id="50" />
+      <outgoing id="52" />
+    </attributes>
+  </widget>
+  <widget id="52" type="Transition">
+    <attributes>
+      <event name="open_curl_br" comment="We see an open curly braket" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="51" type="State">
+    <attributes>
+      <name>SDst1</name>
+      <type>0</type>
+      <incoming id="52" />
+      <outgoing id="54" />
+      <outgoing id="75" />
+    </attributes>
+  </widget>
+  <widget id="54" type="Transition">
+    <attributes>
+      <event name="id" comment="We see the word &quot;id&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="53" type="State">
+    <attributes>
+      <name>Dst_ID</name>
+      <type>0</type>
+      <incoming id="54" />
+      <outgoing id="56" />
+    </attributes>
+  </widget>
+  <widget id="56" type="Transition">
+    <attributes>
+      <event name="number" comment="" />
+      <action name="SetTransEnd" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="55" type="State">
+    <attributes>
+      <name>Dst_ID1</name>
+      <type>0</type>
+      <incoming id="56" />
+      <outgoing id="57" />
+    </attributes>
+  </widget>
+  <widget id="58" type="State">
+    <attributes>
+      <name>state58</name>
+      <type>0</type>
+      <incoming id="59" />
+      <outgoing id="60" />
+    </attributes>
+  </widget>
+  <widget id="61" type="State">
+    <attributes>
+      <name>SArraySize</name>
+      <type>0</type>
+      <incoming id="62" />
+      <outgoing id="64" />
+    </attributes>
+  </widget>
+  <widget id="64" type="Transition">
+    <attributes>
+      <event name="size" comment="We see the keyword &quot;size&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="63" type="State">
+    <attributes>
+      <name>SArraySize1</name>
+      <type>0</type>
+      <incoming id="64" />
+      <outgoing id="66" />
+    </attributes>
+  </widget>
+  <widget id="66" type="Transition">
+    <attributes>
+      <event name="quote" comment="We see quotation symbol" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="65" type="State">
+    <attributes>
+      <name>SArraySize2</name>
+      <type>0</type>
+      <incoming id="66" />
+      <outgoing id="68" />
+    </attributes>
+  </widget>
+  <widget id="68" type="Transition">
+    <attributes>
+      <event name="number" comment="" />
+      <action name="SetArraySize" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="67" type="State">
+    <attributes>
+      <name>state67</name>
+      <type>0</type>
+      <incoming id="68" />
+      <outgoing id="69" />
+    </attributes>
+  </widget>
+  <widget id="70" type="State">
+    <attributes>
+      <name>state70</name>
+      <type>0</type>
+      <incoming id="71" />
+      <outgoing id="72" />
+    </attributes>
+  </widget>
+</diagram>

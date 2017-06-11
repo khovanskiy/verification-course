@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<diagram>
+  <name>APParser</name>
+  <data>
+    <Statemachine>
+      <event name="word" comment="we see a word" />
+      <event name="static_keyword" comment="we see a keyword static" />
+      <event name="machine_type" comment="We see machine type" />
+      <event name="machine_name" comment="We see machine name" />
+      <event name="static_variable" comment="we see a static variable" />
+      <event name="dot" comment="We see dot" />
+      <event name="variable" comment="We see a variable" />
+      <event name="see_operator" comment="We see an operator" />
+      <event name="constant" comment="" />
+      <event name="array" comment="" />
+      <event name="open_sq_bracket" comment="" />
+      <event name="close_sq_bracket" comment="" />
+      <event name="event_name" comment="" />
+      <event name="function_name" comment="" />
+      <event name="state_name" comment="" />
+      <event name="two_vertical_line" comment="We see ||" />
+      <event name="fork_machine" comment="" />
+      <event name="see_arrow" comment="" />
+      <event name="nested_machine" comment="" />
+      <event name="see_minus" comment="" />
+      <event name="see_gt" comment="We see &quot;&gt;&quot;" />
+      <event name="vertical_line" comment="" />
+      <autoreject>True</autoreject>
+    </Statemachine>
+  </data>
+  <widget id="0" type="State">
+    <attributes>
+      <name>state0</name>
+      <type>1</type>
+      <outgoing id="2" />
+    </attributes>
+  </widget>
+  <widget id="2" type="Transition">
+    <attributes>
+      <event name="machine_type" comment="We see machine type" />
+      <action name="WriteDefine" comment="" synchro="1" />
+      <action name="SaveMachineType" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="1" type="State">
+    <attributes>
+      <name>MachineType</name>
+      <type>0</type>
+      <incoming id="2" />
+      <outgoing id="10" />
+    </attributes>
+  </widget>
+  <widget id="10" type="Transition">
+    <attributes>
+      <event name="machine_name" comment="We see machine name" />
+      <action name="WriteToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="9" type="State">
+    <attributes>
+      <name>MachineName</name>
+      <type>0</type>
+      <incoming id="10" />
+      <outgoing id="14" />
+      <outgoing id="56" />
+      <outgoing id="59" />
+    </attributes>
+  </widget>
+  <widget id="14" type="Transition">
+    <attributes>
+      <event name="dot" comment="We see dot" />
+      <action name="WriteToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="56" type="Transition">
+    <attributes>
+      <event name="see_minus" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="59" type="Transition">
+    <attributes>
+      <event name="vertical_line" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="13" type="State">
+    <attributes>
+      <name>NameWithDot</name>
+      <type>0</type>
+      <incoming id="14" />
+      <outgoing id="44" />
+      <outgoing id="45" />
+      <outgoing id="61" />
+      <nested type="ExprParser" name="exprParser" />
+    </attributes>
+  </widget>
+  <widget id="44" type="Transition">
+    <attributes>
+      <event name="function_name" comment="" />
+      <action name="WriteFunctionProposition" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="45" type="Transition">
+    <attributes>
+      <event name="state_name" comment="" />
+      <action name="WriteStateProposition" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="61" type="Transition">
+    <attributes>
+      <event name="event_name" comment="" />
+      <action name="WriteEventProposition" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="39" type="State">
+    <attributes>
+      <name>EventFound</name>
+      <type>2</type>
+      <incoming id="61" />
+    </attributes>
+  </widget>
+  <widget id="41" type="State">
+    <attributes>
+      <name>FunctionFound</name>
+      <type>2</type>
+      <incoming id="44" />
+    </attributes>
+  </widget>
+  <widget id="42" type="State">
+    <attributes>
+      <name>StateFound</name>
+      <type>2</type>
+      <incoming id="45" />
+    </attributes>
+  </widget>
+  <widget id="47" type="State">
+    <attributes>
+      <name>Fork</name>
+      <type>0</type>
+      <incoming id="60" />
+      <incoming id="63" />
+      <outgoing id="50" />
+      <outgoing id="63" />
+    </attributes>
+  </widget>
+  <widget id="60" type="Transition">
+    <attributes>
+      <event name="vertical_line" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="63" type="Transition">
+    <attributes>
+      <event name="machine_type" comment="We see machine type" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="50" type="Transition">
+    <attributes>
+      <event name="machine_name" comment="We see machine name" />
+      <action name="WriteEndForkProp" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="49" type="State">
+    <attributes>
+      <name>ForkMachine</name>
+      <type>2</type>
+      <incoming id="50" />
+    </attributes>
+  </widget>
+  <widget id="51" type="State">
+    <attributes>
+      <name>NameWithArrow</name>
+      <type>0</type>
+      <incoming id="57" />
+      <incoming id="62" />
+      <outgoing id="54" />
+      <outgoing id="62" />
+    </attributes>
+  </widget>
+  <widget id="57" type="Transition">
+    <attributes>
+      <event name="see_operator" comment="We see an operator" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="62" type="Transition">
+    <attributes>
+      <event name="machine_type" comment="We see machine type" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="54" type="Transition">
+    <attributes>
+      <event name="machine_name" comment="We see machine name" />
+      <action name="WriteEndPropNested" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="53" type="State">
+    <attributes>
+      <name>NestedMachine</name>
+      <type>2</type>
+      <incoming id="54" />
+    </attributes>
+  </widget>
+  <widget id="55" type="State">
+    <attributes>
+      <name>FirstPartArrow</name>
+      <type>0</type>
+      <incoming id="56" />
+      <outgoing id="57" />
+    </attributes>
+  </widget>
+  <widget id="58" type="State">
+    <attributes>
+      <name>Vert</name>
+      <type>0</type>
+      <incoming id="59" />
+      <outgoing id="60" />
+    </attributes>
+  </widget>
+</diagram>

@@ -1,0 +1,21 @@
+<diagram>
+    <name>abc</name>
+    <data/>
+    <widget type="Transition" id="4">
+        <attributes>
+            <event/>
+            <action name="a"/>
+            <action name="b"/>
+            <code/>
+            <guard/>
+        </attributes>
+    </widget>
+    <widget id="4" type="Transition">
+        <attributes>
+            <event/>
+            <action name="a"/>
+            <code/>
+            <guard/>
+        </attributes>
+    </widget>
+</diagram>

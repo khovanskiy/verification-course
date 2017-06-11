@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<diagram>
+  <name>ExprParser</name>
+  <data>
+    <Statemachine>
+      <event name="word" comment="we see a word" />
+      <event name="static_keyword" comment="we see a keyword static" />
+      <event name="machine_type" comment="We see machine type" />
+      <event name="machine_name" comment="We see machine name" />
+      <event name="static_variable" comment="we see a static variable" />
+      <event name="dot" comment="We see dot" />
+      <event name="variable" comment="We see a variable" />
+      <event name="see_operator" comment="We see an operator" />
+      <event name="constant" comment="" />
+      <event name="array" comment="" />
+      <event name="open_sq_bracket" comment="" />
+      <event name="close_sq_bracket" comment="" />
+      <event name="event_name" comment="" />
+      <event name="function_name" comment="" />
+      <event name="state_name" comment="" />
+      <event name="two_vertical_line" comment="We see ||" />
+      <event name="fork_machine" comment="" />
+      <event name="see_arrow" comment="" />
+      <event name="nested_machine" comment="" />
+      <event name="see_minus" comment="" />
+      <event name="see_gt" comment="We see &quot;&gt;&quot;" />
+      <event name="vertical_line" comment="" />
+      <autoreject>True</autoreject>
+    </Statemachine>
+  </data>
+  <widget id="0" type="State">
+    <attributes>
+      <name>state0</name>
+      <type>1</type>
+      <outgoing id="39" />
+      <outgoing id="40" />
+    </attributes>
+  </widget>
+  <widget id="39" type="Transition">
+    <attributes>
+      <event name="variable" comment="We see a variable" />
+      <action name="WriteToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="40" type="Transition">
+    <attributes>
+      <event name="array" comment="" />
+      <action name="WriteToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="15" type="State">
+    <attributes>
+      <name>Variable</name>
+      <type>0</type>
+      <incoming id="39" />
+      <outgoing id="18" />
+    </attributes>
+  </widget>
+  <widget id="18" type="Transition">
+    <attributes>
+      <event name="see_operator" comment="We see an operator" />
+      <action name="WriteSpace" comment="" synchro="1" />
+      <action name="WriteToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="17" type="State">
+    <attributes>
+      <name>VarAndOp</name>
+      <type>0</type>
+      <incoming id="18" />
+      <incoming id="30" />
+      <nested type="VarParser" name="varParser" />
+    </attributes>
+  </widget>
+  <widget id="30" type="Transition">
+    <attributes>
+      <event name="see_operator" comment="We see an operator" />
+      <action name="WriteSpace" comment="" synchro="1" />
+      <action name="WriteToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="21" type="State">
+    <attributes>
+      <name>SArray</name>
+      <type>0</type>
+      <incoming id="40" />
+      <outgoing id="24" />
+    </attributes>
+  </widget>
+  <widget id="24" type="Transition">
+    <attributes>
+      <event name="open_sq_bracket" comment="" />
+      <action name="WriteToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="23" type="State">
+    <attributes>
+      <name>SQBracket</name>
+      <type>0</type>
+      <incoming id="24" />
+      <outgoing id="32" />
+      <outgoing id="33" />
+    </attributes>
+  </widget>
+  <widget id="32" type="Transition">
+    <attributes>
+      <event name="machine_type" comment="We see machine type" />
+      <action name="WriteNestedMachine" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="33" type="Transition">
+    <attributes>
+      <event name="constant" comment="" />
+      <action name="WriteToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="25" type="State">
+    <attributes>
+      <name>Index</name>
+      <type>0</type>
+      <incoming id="33" />
+      <incoming id="38" />
+      <outgoing id="29" />
+    </attributes>
+  </widget>
+  <widget id="38" type="Transition">
+    <attributes>
+      <event name="variable" comment="We see a variable" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="29" type="Transition">
+    <attributes>
+      <event name="close_sq_bracket" comment="" />
+      <action name="WriteToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="28" type="State">
+    <attributes>
+      <name>EArray</name>
+      <type>0</type>
+      <incoming id="29" />
+      <outgoing id="30" />
+    </attributes>
+  </widget>
+  <widget id="31" type="State">
+    <attributes>
+      <name>IMT</name>
+      <type>0</type>
+      <incoming id="32" />
+      <outgoing id="35" />
+    </attributes>
+  </widget>
+  <widget id="35" type="Transition">
+    <attributes>
+      <event name="machine_name" comment="We see machine name" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="34" type="State">
+    <attributes>
+      <name>IMN</name>
+      <type>0</type>
+      <incoming id="35" />
+      <outgoing id="37" />
+    </attributes>
+  </widget>
+  <widget id="37" type="Transition">
+    <attributes>
+      <event name="dot" comment="We see dot" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="36" type="State">
+    <attributes>
+      <name>IMND</name>
+      <type>0</type>
+      <incoming id="37" />
+      <outgoing id="38" />
+    </attributes>
+  </widget>
+</diagram>
