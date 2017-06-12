@@ -22,4 +22,14 @@ public class BinaryFormula <T> extends Formula<T>{
         }
 
     }
+
+    @Override
+    public void accept(LTLVisitor<T> visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public Formula<T> negation() {
+        return this;
+    }
 }

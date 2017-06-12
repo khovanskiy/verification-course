@@ -8,12 +8,11 @@ import static ltl.BinaryOperation.*;
 
 public class LTL {
     public static <T> Formula<T> t(){
-        Const<T> c = new Const<>();
-        return new BinaryFormula<>(OR, c, new Not<>(c));
+        return new Const<>(true);
     }
 
     public static <T> Formula<T> f(){
-        return new Not<>(t());
+        return new Const<>(false);
     }
 
     public static <T> Formula<T> impl(Formula<T> l, Formula<T> r){

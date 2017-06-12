@@ -7,8 +7,13 @@ public abstract class Formula <T> {
      * @return transformed formula
      */
     public abstract Formula<T> toNormalForm(boolean negation);
+
     public Formula<T> toNormalForm(){
         return toNormalForm(false);
     }
+
+    public abstract void accept(LTLVisitor<T> visitor);
+
+    public abstract Formula<T> negation();
 
 }
