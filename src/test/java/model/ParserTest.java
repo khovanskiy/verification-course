@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.xml.stream.XMLStreamException;
@@ -19,9 +21,9 @@ import java.util.List;
 public class ParserTest {
 
     private final String xml = "" +
-            "<widget id=\"4\" type=\"Transition\" >\n" +
+            "<widget id=\"4\" type=\"Transition\">\n" +
             "    <attributes>\n" +
-            "      <event name=\"number\" comment=\"123\" />\n" +
+            "      <event name=\"number\" comment=\"123\"/>\n" +
             "      <action name=\"SetID1\" comment=\"\"/>\n" +
             "      <action name=\"SetID2\" comment=\"\"/>\n" +
             "      <action name=\"SetID3\" comment=\"\"/>\n" +
@@ -30,17 +32,28 @@ public class ParserTest {
             "    </attributes>\n" +
             "</widget>";
 
-    @Test
-    public void read() throws IOException, XMLStreamException {
-        XmlMapper xmlMapper = new XmlMapper();
+    private XmlMapper xmlMapper;
+
+    @Before
+    public void before() {
+        xmlMapper = new XmlMapper();
         xmlMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-        Diagram diagram = xmlMapper.readValue(new File("data/VarParser.xstd"), Diagram.class);
-        diagram.toString();
-        //Widget widget = xmlMapper.readValue(xml, Widget.class);
-        //Assert.assertEquals("Actions number", 3, widget.getAttributes().getActions().size());
     }
 
-    //@Test
+    @Test
+    public void readFromString() throws IOException, XMLStreamException {
+        Widget widget = xmlMapper.readValue(xml, Widget.class);
+        Assert.assertEquals("Actions number", 3, widget.getAttributes().getActions().size());
+    }
+
+    @Test
+    public void readFromFile() throws Exception {
+        Diagram diagram = xmlMapper.readValue(new File("data/VarParser.xstd"), Diagram.class);
+        Assert.assertEquals("Widget number", 21, diagram.getWidget().size());
+    }
+
+    @Test
+    @Ignore("Probably we not need in writing")
     public void write() throws IOException {
         Diagram etalon = new Diagram();
         Event event = new Event();
