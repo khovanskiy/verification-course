@@ -19,11 +19,13 @@ public class Verifier<T> {
     }
 
     public Iterable<T> check(Formula<T> ltl){
+        Node init = new Node();
         ltl = ltl.toNormalForm(true);
         Node node = new Node();
+        node.incoming.add(init);
         node.novel.add(ltl);
         Set<Node> automaton = expand(node, new LinkedHashSet<>());
-        Automaton<T> ltlAutomaton = transform(automaton);
+        Automaton<T> ltlAutomaton = transform(init, automaton);
         Automaton<T> badLang = Automaton.intersect(ltlAutomaton, model);
         return badLang.findAWord();
     }
@@ -66,7 +68,7 @@ public class Verifier<T> {
         return expand(newNode, nodes);
     }
 
-    private Automaton<T> transform(Set<Node> old){
+    private Automaton<T> transform(Node init, Set<Node> old){
 
     }
 
