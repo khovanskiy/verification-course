@@ -10,6 +10,7 @@ import java.util.*;
 public class Automaton<T> {
     private List<Map<T, List<Integer>>> automaton;
     private Set<Integer> acceptingSet;
+    private int initialState;
 
     public Automaton(int n){
         if(n < 1){
@@ -38,6 +39,11 @@ public class Automaton<T> {
             outgoings.put(symbol, new ArrayList<>());
         }
         outgoings.get(symbol).add(stateB);
+    }
+
+    public void setInitialState(int state){
+        checkState(state);
+        initialState = state;
     }
 
     public void setAccepting(int state){
@@ -83,6 +89,7 @@ public class Automaton<T> {
                 c.setAccepting(convert(i, accB, 1, m));
             }
         }
+        c.setInitialState(convert(a.initialState, b.initialState, 0, m));
         return c;
     }
 
