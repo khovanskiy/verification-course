@@ -1,16 +1,9 @@
 package ltl;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Data
-public class Variable <T> extends Formula<T> {
-    private final T name;
-
-    @Override
-    public String toString(){
-        return name.toString();
-    }
-
+@EqualsAndHashCode
+public class Const <T> extends Formula<T> {
     @Override
     public Formula<T> toNormalForm(boolean negation) {
         if(negation){
@@ -18,5 +11,10 @@ public class Variable <T> extends Formula<T> {
         } else {
             return this;
         }
+    }
+
+    @Override
+    public String toString(){
+        return "p";
     }
 }

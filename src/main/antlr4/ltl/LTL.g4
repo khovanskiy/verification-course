@@ -4,10 +4,10 @@ grammar LTL;
     import static ltl.BinaryOperation.*;
 }
 
-ltl returns [Formula f]
+ltl returns [Formula<String> f]
     :   'X' ltl
     {
-        $f = new Next($ltl.f);
+        $f = LTL.next($ltl.f);
     }
     |   'G' ltl
     {
@@ -23,14 +23,14 @@ ltl returns [Formula f]
     }
     ;
 
-binary returns [Formula f]
+binary returns [Formula<String> f]
     :   l=binary 'U' r=binary
     {
-        $f = new BinaryFormula(U, $l.f, $r.f);
+        $f = LTL.until($l.f, $r.f);
     }
     |   l=binary 'R' r=binary
     {
-        $f = new BinaryFormula(R, $l.f, $r.f);
+        $f = LTL.release($l.f, $r.f);
     }
     |   prop
     {
@@ -38,14 +38,14 @@ binary returns [Formula f]
     }
     ;
 
-prop returns [Formula f]
+prop returns [Formula<String> f]
     :   l=prop '&' r=prop
     {
-        $f = new BinaryFormula(AND, $l.f, $r.f);
+        $f = LTL.and($l.f, $r.f);
     }
     |   l=prop '|' r=prop
     {
-        $f = new BinaryFormula(OR, $l.f, $r.f);
+        $f = LTL.or($l.f, $r.f);
     }
     |   <assoc=right> l=prop '->' r=prop
     {
@@ -61,7 +61,7 @@ prop returns [Formula f]
     }
     ;
 
-primary returns [Formula f]
+primary returns [Formula<String> f]
     :   constant
     {
         $f = $constant.f;
@@ -72,23 +72,23 @@ primary returns [Formula f]
     }
     |   '!' primary
     {
-        $f = new Not($primary.f);
+        $f = LTL.not($primary.f);
     }
     ;
 
-constant returns [Formula f]
+constant returns [Formula<String> f]
     :   TRUE
     {
-        $f = LTL.TRUE;
+        $f = LTL.t();
     }
     |   FALSE
     {
-        $f = LTL.FALSE;
+        $f = LTL.f();
     }
     |   StringLiteral
     {
         String name = $StringLiteral.text;
-        $f = new Variable(name.substring(1, name.length() - 1));
+        $f = LTL.var(name.substring(1, name.length() - 1));
     }
     ;
 

@@ -3,10 +3,10 @@ package ltl;
 import lombok.Data;
 
 @Data
-public class BinaryFormula extends Formula{
+public class BinaryFormula <T> extends Formula<T>{
     private final BinaryOperation operation;
-    private final Formula left;
-    private final Formula right;
+    private final Formula<T> left;
+    private final Formula<T> right;
 
     @Override
     public String toString(){
@@ -14,11 +14,11 @@ public class BinaryFormula extends Formula{
     }
 
     @Override
-    public Formula toNormalForm(boolean negation) {
+    public Formula<T> toNormalForm(boolean negation) {
         if(negation){
             return operation.toNormalForm(left, right);
         } else {
-            return new BinaryFormula(operation, left.toNormalForm(false), right.toNormalForm(false));
+            return new BinaryFormula<>(operation, left.toNormalForm(false), right.toNormalForm(false));
         }
 
     }
