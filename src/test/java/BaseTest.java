@@ -8,7 +8,6 @@ import org.junit.Test;
  */
 @Slf4j
 public class BaseTest {
-
     @Test
     public void main() {
         log.info("Base Test");

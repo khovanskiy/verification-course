@@ -3,8 +3,8 @@ package ltl;
 import lombok.Data;
 
 @Data
-public class Not extends Formula {
-    private final Formula f;
+public class Not <T> extends Formula<T> {
+    private final Formula<T> f;
 
     @Override
     public String toString(){
@@ -12,7 +12,7 @@ public class Not extends Formula {
     }
 
     @Override
-    public Formula toNormalForm(boolean negation) {
+    public Formula<T> toNormalForm(boolean negation) {
         return f.toNormalForm(!negation);
     }
 }

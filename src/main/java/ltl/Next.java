@@ -3,7 +3,7 @@ package ltl;
 import lombok.Data;
 
 @Data
-public class Next extends Formula {
+public class Next <T> extends Formula<T> {
     private final Formula f;
 
     @Override
@@ -12,7 +12,7 @@ public class Next extends Formula {
     }
 
     @Override
-    public Formula toNormalForm(boolean negation) {
-        return new Next(f.toNormalForm(negation));
+    public Formula<T> toNormalForm(boolean negation) {
+        return new Next<>(f.toNormalForm(negation));
     }
 }

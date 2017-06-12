@@ -1,6 +1,6 @@
-package ltl;
-
 import lombok.extern.slf4j.Slf4j;
+import ltl.Formula;
+import ltl.LTL;
 import org.junit.Assert;
 import org.junit.Test;
 
