@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Next <T> extends Formula<T> {
-    private final Formula f;
+    private final Formula<T> f;
 
     @Override
     public String toString(){

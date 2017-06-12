@@ -4,11 +4,10 @@ import buchi.Automaton;
 import lombok.RequiredArgsConstructor;
 import ltl.*;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
+import static java.util.Arrays.asList;
 import static ltl.BinaryOperation.*;
 
 public class Verifier<T> {
@@ -59,17 +58,14 @@ public class Verifier<T> {
     }
 
     private Set<Node> replace(Node current, Set<Node> nodes, Formula<T> n){
-        Node newNode = new Node();
-        newNode.incoming.addAll(current.incoming);
-        newNode.old.addAll(current.old);
+        Node newNode = new Node(current);
         newNode.old.add(n);
-        newNode.novel.addAll(current.novel);
-        newNode.next.addAll(current.next);
         return expand(newNode, nodes);
     }
 
     private Automaton<T> transform(Node init, Set<Node> old){
-
+        //TODO
+        return null;
     }
 
     @RequiredArgsConstructor
@@ -81,16 +77,39 @@ public class Verifier<T> {
         @Override
         public void visit(BinaryFormula<T> binary) {
             if(binary.getOperation() == OR){
-
+                Node newNode1 = new Node(current);
+                current.old.add(binary);
+                current.novel.add(binary.getLeft());
+                Node newNode2 = new Node(current);
+                newNode2.old.add(binary);
+                newNode2.novel.add(binary.getRight());
+                result = expand(newNode2, expand(newNode1, nodes));
             }
             if(binary.getOperation() == AND){
-
+                Node newNode = new Node(current);
+                newNode.old.add(binary);
+                newNode.novel.addAll(asList(binary.getLeft(), binary.getRight()));
+                result = expand(newNode, nodes);
             }
             if(binary.getOperation() == R){
-
+                Node newNode1 = new Node(current);
+                newNode1.old.add(binary);
+                newNode1.novel.add(binary.getLeft());
+                Node newNode2 = new Node(current);
+                newNode2.old.add(binary);
+                newNode2.novel.addAll(asList(binary.getLeft(), binary.getRight()));
+                newNode2.next.add(LTL.release(binary.getLeft(), binary.getRight()));
+                result = expand(newNode2, expand(newNode1, nodes));
             }
             if(binary.getOperation() == U){
-
+                Node newNode1 = new Node(current);
+                newNode1.old.add(binary);
+                newNode1.novel.add(binary.getLeft());
+                newNode1.next.add(LTL.until(binary.getLeft(), binary.getRight()));
+                Node newNode2 = new Node(current);
+                newNode2.old.add(binary);
+                newNode2.novel.add(binary.getRight());
+                result = expand(newNode2, expand(newNode1, nodes));
             }
         }
 
@@ -110,7 +129,10 @@ public class Verifier<T> {
 
         @Override
         public void visit(Next<T> formula) {
-
+            Node newNode = new Node(current);
+            newNode.old.add(formula);
+            newNode.next.add(formula.getF());
+            result = expand(newNode, nodes);
         }
 
         @Override
@@ -120,7 +142,7 @@ public class Verifier<T> {
     }
 
     private class Node {
-        List<Node> incoming;
+        Set<Node> incoming;
         Set<Formula<T>> old;
         Set<Formula<T>> novel;
         Set<Formula<T>> next;
@@ -129,7 +151,14 @@ public class Verifier<T> {
             old = new LinkedHashSet<>();
             novel = new LinkedHashSet<>();
             next = new LinkedHashSet<>();
-            incoming = new ArrayList<>();
+            incoming = new LinkedHashSet<>();
+        }
+
+        Node(Node node){
+            this.old = new LinkedHashSet<>(node.old);
+            this.incoming = new LinkedHashSet<>(node.incoming);
+            this.novel = new LinkedHashSet<>(node.novel);
+            this.next = new LinkedHashSet<>(node.next);
         }
     }
 }
