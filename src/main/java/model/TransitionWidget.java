@@ -12,4 +12,8 @@ import lombok.Setter;
 @Setter
 public class TransitionWidget extends Widget {
     private TransitionAttributes attributes;
+
+    public TransitionWidget() {
+        super("Transition");
+    }
 }

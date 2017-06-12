@@ -11,4 +11,8 @@ import lombok.Setter;
 @Setter
 public class StateWidget extends Widget {
     private StateAttributes attributes;
+
+    public StateWidget() {
+        super("State");
+    }
 }

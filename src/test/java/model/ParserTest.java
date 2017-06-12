@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import service.DiagramService;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
@@ -33,11 +34,14 @@ public class ParserTest {
             "</widget>";
 
     private XmlMapper xmlMapper;
+    private DiagramService diagramService;
 
     @Before
     public void before() {
         xmlMapper = new XmlMapper();
         xmlMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
+        diagramService = new DiagramService();
     }
 
     @Test
@@ -48,7 +52,7 @@ public class ParserTest {
 
     @Test
     public void readFromFile() throws Exception {
-        Diagram diagram = xmlMapper.readValue(new File("data/VarParser.xstd"), Diagram.class);
+        Diagram diagram = diagramService.parseDiagram(new File("data/VarParser.xstd"));
         Assert.assertEquals("Widget number", 21, diagram.getWidget().size());
     }
 
