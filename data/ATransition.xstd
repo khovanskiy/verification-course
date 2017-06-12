@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<diagram>
+  <name>ATransition</name>
+  <data>
+    <Statemachine>
+      <autoreject>False</autoreject>
+    </Statemachine>
+  </data>
+  <widget id="0" type="State">
+    <attributes>
+      <name>state0</name>
+      <type>1</type>
+      <incoming id="3" />
+      <incoming id="9" />
+      <outgoing id="2" />
+      <outgoing id="5" />
+    </attributes>
+  </widget>
+  <widget id="3" type="Transition">
+    <attributes>
+      <event name="number" comment="" />
+      <action name="SetID" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="9" type="Transition">
+    <attributes>
+      <event name="quote" comment="We see quotation symbol" />
+      <action name="SetName" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="2" type="Transition">
+    <attributes>
+      <event name="id" comment="We see the word &quot;id&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="5" type="Transition">
+    <attributes>
+      <event name="labelString" comment="We see a keyword &quot;labelString&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="1" type="State">
+    <attributes>
+      <name>StateID</name>
+      <type>0</type>
+      <incoming id="2" />
+      <outgoing id="3" />
+    </attributes>
+  </widget>
+  <widget id="4" type="State">
+    <attributes>
+      <name>StartLabel</name>
+      <type>0</type>
+      <incoming id="5" />
+      <outgoing id="7" />
+    </attributes>
+  </widget>
+  <widget id="7" type="Transition">
+    <attributes>
+      <event name="quote" comment="We see quotation symbol" />
+      <action name="ClearText" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="6" type="State">
+    <attributes>
+      <name>SLabel</name>
+      <type>0</type>
+      <incoming id="7" />
+      <incoming id="8" />
+      <outgoing id="8" />
+      <outgoing id="9" />
+    </attributes>
+  </widget>
+  <widget id="8" type="Transition">
+    <attributes>
+      <event name="*" comment="No event" />
+      <action name="AddToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+</diagram>

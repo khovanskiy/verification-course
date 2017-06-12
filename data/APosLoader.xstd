@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<diagram>
+  <name>APosLoader</name>
+  <data>
+    <Statemachine />
+  </data>
+  <widget id="0" type="State">
+    <attributes>
+      <name>state0</name>
+      <type>1</type>
+      <incoming id="3" />
+      <outgoing id="2" />
+    </attributes>
+  </widget>
+  <widget id="3" type="Transition">
+    <attributes>
+      <event name="diagram" comment="tag &quot;diagram&quot;" />
+    </attributes>
+  </widget>
+  <widget id="2" type="Transition">
+    <attributes>
+      <event name="diagram" comment="tag &quot;diagram&quot;" />
+    </attributes>
+  </widget>
+  <widget id="4" type="State">
+    <attributes>
+      <name>Diagram</name>
+      <type>0</type>
+      <incoming id="2" />
+      <incoming id="6" />
+      <outgoing id="3" />
+      <outgoing id="5" />
+    </attributes>
+  </widget>
+  <widget id="6" type="Transition">
+    <attributes>
+      <event name="state" comment="tag &quot;state&quot;" />
+      <action name="WritePositions" comment="" synchro="1" />
+    </attributes>
+  </widget>
+  <widget id="5" type="Transition">
+    <attributes>
+      <event name="state" comment="tag &quot;state&quot;" />
+    </attributes>
+  </widget>
+  <widget id="7" type="State">
+    <attributes>
+      <name>State</name>
+      <type>0</type>
+      <incoming id="5" />
+      <incoming id="7" />
+      <incoming id="8" />
+      <incoming id="9" />
+      <incoming id="10" />
+      <incoming id="11" />
+      <outgoing id="6" />
+      <outgoing id="7" />
+      <outgoing id="8" />
+      <outgoing id="9" />
+      <outgoing id="10" />
+      <outgoing id="11" />
+    </attributes>
+  </widget>
+  <widget id="7" type="Transition">
+    <attributes>
+      <event name="height" comment="attribute &quot;height&quot;" />
+      <action name="SetHeight" comment="" synchro="1" />
+    </attributes>
+  </widget>
+  <widget id="8" type="Transition">
+    <attributes>
+      <event name="width" comment="attribute &quot;width&quot;" />
+      <action name="SetWidth" comment="" synchro="1" />
+    </attributes>
+  </widget>
+  <widget id="9" type="Transition">
+    <attributes>
+      <event name="y" comment="attribute &quot;y&quot;" />
+      <action name="SetY" comment="" synchro="1" />
+    </attributes>
+  </widget>
+  <widget id="10" type="Transition">
+    <attributes>
+      <event name="x" comment="attribute &quot;x&quot;" />
+      <action name="SetX" comment="" synchro="1" />
+    </attributes>
+  </widget>
+  <widget id="11" type="Transition">
+    <attributes>
+      <event name="id" comment="attribute &quot;id&quot;" />
+      <action name="SetCurState" comment="" synchro="1" />
+    </attributes>
+  </widget>
+</diagram>

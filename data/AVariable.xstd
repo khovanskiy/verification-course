@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<diagram>
+  <name>AVariable</name>
+  <data>
+    <Statemachine>
+      <event name="scope" comment="We see the word &quot;scope&quot;" />
+      <event name="INPUT_DATA" comment="We see the word &quot;INPUT_DATA&quot;" />
+      <event name="OUTPUT_DATA" comment="We see the keyword &quot;OUTPUT_DATA&quot;" />
+      <event name="LOCAL_DATA" comment="We see the word &quot;LOCAL_DATA&quot;" />
+      <autoreject>False</autoreject>
+    </Statemachine>
+  </data>
+  <widget id="0" type="State">
+    <attributes>
+      <name>state0</name>
+      <type>1</type>
+      <incoming id="4" />
+      <incoming id="9" />
+      <incoming id="12" />
+      <incoming id="13" />
+      <incoming id="14" />
+      <outgoing id="3" />
+      <outgoing id="5" />
+      <outgoing id="11" />
+    </attributes>
+  </widget>
+  <widget id="4" type="Transition">
+    <attributes>
+      <event name="number" comment="" />
+      <action name="SetID" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="9" type="Transition">
+    <attributes>
+      <event name="quote" comment="We see quotation symbol" />
+      <action name="SetName" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="12" type="Transition">
+    <attributes>
+      <event name="INPUT_DATA" comment="We see the word &quot;INPUT_DATA&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="13" type="Transition">
+    <attributes>
+      <event name="OUTPUT_DATA" comment="We see the keyword &quot;OUTPUT_DATA&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="14" type="Transition">
+    <attributes>
+      <event name="LOCAL_DATA" comment="We see the word &quot;LOCAL_DATA&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="3" type="Transition">
+    <attributes>
+      <event name="id" comment="We see the word &quot;id&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="5" type="Transition">
+    <attributes>
+      <event name="name" comment="We see the word &quot;name&quot;" />
+      <action name="ClearText" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="11" type="Transition">
+    <attributes>
+      <event name="scope" comment="We see the word &quot;scope&quot;" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="1" type="State">
+    <attributes>
+      <name>state1</name>
+      <type>0</type>
+      <incoming id="3" />
+      <outgoing id="4" />
+    </attributes>
+  </widget>
+  <widget id="2" type="State">
+    <attributes>
+      <name>SName</name>
+      <type>0</type>
+      <incoming id="5" />
+      <outgoing id="7" />
+    </attributes>
+  </widget>
+  <widget id="7" type="Transition">
+    <attributes>
+      <event name="quote" comment="We see quotation symbol" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="6" type="State">
+    <attributes>
+      <name>SName1</name>
+      <type>0</type>
+      <incoming id="7" />
+      <incoming id="8" />
+      <outgoing id="8" />
+      <outgoing id="9" />
+    </attributes>
+  </widget>
+  <widget id="8" type="Transition">
+    <attributes>
+      <event name="*" comment="No event" />
+      <action name="AddToken" comment="" synchro="1" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+  <widget id="10" type="State">
+    <attributes>
+      <name>Scope</name>
+      <type>0</type>
+      <incoming id="11" />
+      <outgoing id="12" />
+      <outgoing id="13" />
+      <outgoing id="14" />
+    </attributes>
+  </widget>
+</diagram>
