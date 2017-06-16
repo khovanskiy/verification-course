@@ -21,6 +21,7 @@ public class Attributes {
     private Integer type;
     private List<Incoming> incomings;
     private List<Outgoing> outgoings;
+    private Nested nested;
 
     @JacksonXmlProperty(localName = "incoming")
     @JacksonXmlElementWrapper(useWrapping = false)
