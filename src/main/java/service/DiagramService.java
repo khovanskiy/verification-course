@@ -2,7 +2,7 @@ package service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import model.*;
+import model.diagram.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +28,41 @@ public class DiagramService {
     public Diagram parseDiagram(File file) throws IOException {
         Diagram diagram = xmlMapper.readValue(file, Diagram.class);
         return prepareDiagram(diagram);
+    }
+
+    private Diagram prepareDiagram(Diagram diagram) {
+        List<Widget> widgets = Optional.ofNullable(diagram)
+                .map(Stream::of)
+                .orElseGet(Stream::empty)
+                .flatMap(d -> d.getWidget().stream())
+                .map(w -> {
+                    switch (w.getType()) {
+                        case "State": {
+                            StateWidget mapped = new StateWidget();
+                            mapped.setId(w.getId());
+                            mapped.setAttributes(new StateAttributes());
+                            mapped.getAttributes().setName(w.getAttributes().getName());
+                            mapped.getAttributes().setType(w.getAttributes().getType());
+                            mapped.getAttributes().setIncomings(w.getAttributes().getIncomings());
+                            mapped.getAttributes().setOutgoings(w.getAttributes().getOutgoings());
+                            return mapped;
+                        }
+                        case "Transition": {
+                            TransitionWidget mapped = new TransitionWidget();
+                            mapped.setId(w.getId());
+                            mapped.setAttributes(new TransitionAttributes());
+                            mapped.getAttributes().setEvent(w.getAttributes().getEvent());
+                            mapped.getAttributes().setActions(w.getAttributes().getActions());
+                            mapped.getAttributes().setCode(w.getAttributes().getCode());
+                            mapped.getAttributes().setGuard(w.getAttributes().getGuard());
+                            return mapped;
+                        }
+                    }
+                    return w;
+                })
+                .collect(Collectors.toList());
+        diagram.setWidget(widgets);
+        return diagram;
     }
 
     public Diagram parseDiagram(String xml) throws IOException {
@@ -99,40 +134,5 @@ public class DiagramService {
         }
         sb.append("</table>");
         return sb.toString();
-    }
-
-    private Diagram prepareDiagram(Diagram diagram) {
-        List<Widget> widgets = Optional.ofNullable(diagram)
-                .map(Stream::of)
-                .orElseGet(Stream::empty)
-                .flatMap(d -> d.getWidget().stream())
-                .map(w -> {
-                    switch (w.getType()) {
-                        case "State": {
-                            StateWidget mapped = new StateWidget();
-                            mapped.setId(w.getId());
-                            mapped.setAttributes(new StateAttributes());
-                            mapped.getAttributes().setName(w.getAttributes().getName());
-                            mapped.getAttributes().setType(w.getAttributes().getType());
-                            mapped.getAttributes().setIncomings(w.getAttributes().getIncomings());
-                            mapped.getAttributes().setOutgoings(w.getAttributes().getOutgoings());
-                            return mapped;
-                        }
-                        case "Transition": {
-                            TransitionWidget mapped = new TransitionWidget();
-                            mapped.setId(w.getId());
-                            mapped.setAttributes(new TransitionAttributes());
-                            mapped.getAttributes().setEvent(w.getAttributes().getEvent());
-                            mapped.getAttributes().setActions(w.getAttributes().getActions());
-                            mapped.getAttributes().setCode(w.getAttributes().getCode());
-                            mapped.getAttributes().setGuard(w.getAttributes().getGuard());
-                            return mapped;
-                        }
-                    }
-                    return w;
-                })
-                .collect(Collectors.toList());
-        diagram.setWidget(widgets);
-        return diagram;
     }
 }

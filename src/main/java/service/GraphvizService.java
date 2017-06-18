@@ -11,6 +11,10 @@ import java.io.IOException;
  */
 @Slf4j
 public class GraphvizService {
+    public boolean dot(File input, File output) {
+        return executeCommand("dot -Gsplines=true -Goverlap=false -Tpdf " + input.getAbsolutePath() + " -o " + output.getAbsolutePath());
+    }
+
     private boolean executeCommand(String command) {
         Process process;
         try {
@@ -27,9 +31,5 @@ public class GraphvizService {
             log.error(e.getLocalizedMessage(), e);
         }
         return false;
-    }
-
-    public boolean dot(File input, File output) {
-        return executeCommand("dot -Gsplines=true -Goverlap=false -Tpdf " + input.getAbsolutePath() + " -o " + output.getAbsolutePath());
     }
 }

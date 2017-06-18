@@ -21,8 +21,18 @@ public class MainApplication {
     private static File modelFile;
     private static Scanner ltlScanner;
 
+    public static void main(String[] args) {
+        try {
+            parseArgs(args);
+        } catch (IOException e) {
+            // Option parser exception. Scanner never throws IOException
+            System.exit(1);
+        }
+    }
+
     /**
      * CLI args parser. It requires model file and one of ltl formula sources to be specified.
+     *
      * @throws IOException if it can't print help message
      */
     private static void parseArgs(String[] args) throws IOException {
@@ -43,7 +53,7 @@ public class MainApplication {
                     .availableUnless("i", "ltl").withRequiredArg().ofType(String.class);
 
             OptionSet options = optionParser.parse(args);
-            if(options.has("h") || !(options.has("i") || options.has("f") || options.has("l"))) {
+            if (options.has("h") || !(options.has("i") || options.has("f") || options.has("l"))) {
                 System.err.println("You should specify at least one LTL formula\n");
                 optionParser.printHelpOn(System.err);
             }
@@ -61,18 +71,9 @@ public class MainApplication {
                     System.err.println("File " + options.valueOf(ltlFile) + " not found.");
                 }
             }
-        } catch (OptionException e){
+        } catch (OptionException e) {
             System.err.println(e.getMessage() + "\n");
             optionParser.printHelpOn(System.err);
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            parseArgs(args);
-        } catch (IOException e) {
-            // Option parser exception. Scanner never throws IOException
-            System.exit(1);
         }
     }
 }
