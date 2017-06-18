@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Next <T> extends Formula<T> {
-    private final Formula f;
+    private final Formula<T> f;
 
     @Override
     public String toString(){
@@ -14,5 +14,15 @@ public class Next <T> extends Formula<T> {
     @Override
     public Formula<T> toNormalForm(boolean negation) {
         return new Next<>(f.toNormalForm(negation));
+    }
+
+    @Override
+    public void accept(LTLVisitor<T> visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public Formula<T> negation() {
+        return this;
     }
 }

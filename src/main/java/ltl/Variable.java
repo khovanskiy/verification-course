@@ -19,4 +19,14 @@ public class Variable <T> extends Formula<T> {
             return this;
         }
     }
+
+    @Override
+    public void accept(LTLVisitor<T> visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public Formula<T> negation() {
+        return this;
+    }
 }
