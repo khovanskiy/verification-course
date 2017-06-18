@@ -18,6 +18,21 @@ public class VerifierService {
         this.automatonService = automatonService;
     }
 
+    /**
+     * Create the set of nodes which represents buchi automaton.
+     *
+     * @param ltl the ltl-formula
+     * @return the set of nodes
+     */
+    public <T> Set<Node<T>> create(Formula<T> ltl) {
+        Node<T> init = new Node<>();
+        ltl = ltl.toNormalForm(true);
+        Node<T> node = new Node<>();
+        node.getIncoming().add(init);
+        node.getNovel().add(ltl);
+        return expand(node, new LinkedHashSet<>());
+    }
+
     public <T> Iterable<T> check(Automaton<T> model, Formula<T> ltl) {
         Node<T> init = new Node<>();
         ltl = ltl.toNormalForm(true);

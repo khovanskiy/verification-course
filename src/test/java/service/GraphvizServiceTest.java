@@ -2,6 +2,7 @@ package service;
 
 import lombok.extern.slf4j.Slf4j;
 import model.diagram.Diagram;
+import model.graph.Graph;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,27 +15,53 @@ import java.io.IOException;
 @Slf4j
 public class GraphvizServiceTest {
     private static final File dataDir = new File("data");
-    private static final File tempDir = new File("temp");
+    private static final File tempDiagramDir = new File("temp", "diagram");
+    private static final File tempGraphDir = new File("temp", "graph");
     private DiagramService diagramService = new DiagramService();
+    private GraphService graphService = new GraphService();
     private GraphvizService graphvizService = new GraphvizService();
 
     @Test
     public void generate() throws IOException {
+        File[] xstdFiles = getDataFiles();
+        if (xstdFiles != null) {
+            for (File xstdFile : xstdFiles) {
+                String file = xstdFile.getName().substring(0, xstdFile.getName().length() - 5);
+                log.info("File \"{}\" is processing...", xstdFile.getAbsoluteFile());
+                Diagram diagram = diagramService.parseDiagram(xstdFile);
+                File dotFile = new File(tempDiagramDir, file + ".dot");
+                diagramService.convertDiagramToDot(diagram, dotFile);
+                File pdfFile = new File(tempDiagramDir, file + ".pdf");
+                graphvizService.dot(dotFile, pdfFile);
+            }
+        }
+    }
+
+    private File[] getDataFiles() {
         if (dataDir.mkdirs()) {
             log.info("The data directory \"{}\" is created", dataDir.getAbsoluteFile());
         }
-        if (tempDir.mkdirs()) {
-            log.info("The temporary directory \"{}\" is created", tempDir.getAbsoluteFile());
+        if (tempDiagramDir.mkdirs()) {
+            log.info("The temporary directory \"{}\" is created", tempDiagramDir.getAbsoluteFile());
         }
-        File[] xstdFiles = dataDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".xstd"));
+        if (tempGraphDir.mkdirs()) {
+            log.info("The temporary directory \"{}\" is created", tempGraphDir.getAbsoluteFile());
+        }
+        return dataDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".xstd"));
+    }
+
+    @Test
+    public void generate2() throws IOException {
+        File[] xstdFiles = getDataFiles();
         if (xstdFiles != null) {
             for (File xstdFile : xstdFiles) {
-                String file = xstdFile.getName().substring(0, xstdFile.getName().length() - 4);
+                String file = xstdFile.getName().substring(0, xstdFile.getName().length() - 5);
                 log.info("File \"{}\" is processing...", xstdFile.getAbsoluteFile());
                 Diagram diagram = diagramService.parseDiagram(xstdFile);
-                File dotFile = new File(tempDir, file + ".dot");
-                diagramService.convertDiagramToDot(diagram, dotFile);
-                File pdfFile = new File(tempDir, file + ".pdf");
+                Graph graph = graphService.convertToGraph(diagram);
+                File dotFile = new File(tempGraphDir, file + ".dot");
+                graphService.convertToDot(graph, dotFile);
+                File pdfFile = new File(tempGraphDir, file + ".pdf");
                 graphvizService.dot(dotFile, pdfFile);
             }
         }

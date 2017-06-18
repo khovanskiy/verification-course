@@ -7,8 +7,8 @@ import model.diagram.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
-import java.util.function.Function;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -68,13 +68,6 @@ public class DiagramService {
     public Diagram parseDiagram(String xml) throws IOException {
         Diagram diagram = xmlMapper.readValue(xml, Diagram.class);
         return prepareDiagram(diagram);
-    }
-
-    public void convertToGraph(Diagram diagram) {
-        Map<Integer, Widget> widgetMap = diagram.getWidget().stream().collect(Collectors.toMap(Widget::getId, Function.identity()));
-        Map<Integer, Set<Integer>> predessors = new HashMap<>();
-        Map<Integer, Set<Integer>> successors = new HashMap<>();
-
     }
 
     /**
