@@ -3,6 +3,8 @@ package model.ltl;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.util.Map;
+
 @Getter
 @EqualsAndHashCode(callSuper = true)
 public class Variable<T> extends Formula<T> {
@@ -24,6 +26,11 @@ public class Variable<T> extends Formula<T> {
         } else {
             return this;
         }
+    }
+
+    @Override
+    public <N> Formula<N> map(Map<T, N> mapping, N defaultValue) {
+        return new Variable<>(mapping.getOrDefault(name, defaultValue));
     }
 
     @Override
