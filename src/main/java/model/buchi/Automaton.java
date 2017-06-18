@@ -9,7 +9,10 @@ import java.util.*;
  * @param <T> type of the alphabet
  */
 public class Automaton<T> {
-    private final List<Map<T, List<Integer>>> automaton;
+    private static final Integer WHITE = null;
+    private static final Integer GRAY = 1;
+    private static final Integer BLACK = 2;
+    private final Map<Integer, Map<T, List<Integer>>> automaton = new HashMap<>();
     private final Set<Integer> acceptingSet;
     private int initialState;
 
@@ -17,14 +20,10 @@ public class Automaton<T> {
         if (n < 1) {
             throw new IllegalArgumentException();
         }
-        automaton = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            automaton.add(new LinkedHashMap<>());
-        }
         acceptingSet = new HashSet<>();
     }
 
-    public List<Map<T, List<Integer>>> getAutomaton() {
+    public Map<Integer, Map<T, List<Integer>>> getAutomaton() {
         return automaton;
     }
 
@@ -42,9 +41,9 @@ public class Automaton<T> {
     }
 
     private void checkState(int state) {
-        if (state < 0 || state >= size()) {
+        /*if (state < 0 || state >= size()) {
             throw new IllegalArgumentException();
-        }
+        }*/
     }
 
     public int size() {
@@ -58,11 +57,15 @@ public class Automaton<T> {
     public void addTransition(int stateA, int stateB, T symbol) {
         checkState(stateA);
         checkState(stateB);
-        Map<T, List<Integer>> outgoings = automaton.get(stateA);
+        Map<T, List<Integer>> outgoings = get(stateA);
         if (!outgoings.containsKey(symbol)) {
             outgoings.put(symbol, new ArrayList<>());
         }
         outgoings.get(symbol).add(stateB);
+    }
+
+    public Map<T, List<Integer>> get(int stateId) {
+        return automaton.computeIfAbsent(stateId, k -> new LinkedHashMap<>());
     }
 
     public void setAccepting(int state) {
@@ -72,18 +75,18 @@ public class Automaton<T> {
 
     public Collection<T> findAWord() {
         int n = size();
-        int[] color1 = new int[n];
-        int[] color2 = new int[n];
+        Map<Integer, Integer> color1 = new HashMap<>();
+        Map<Integer, Integer> color2 = new HashMap<>();
         Deque<T> path = new ArrayDeque<>();
         dfs1(0, color1, color2, path);
         return path;
     }
 
-    private boolean dfs1(int v, int[] color1, int[] color2, Deque<T> path) {
-        color1[v] = 1;
-        for (T symbol : automaton.get(v).keySet()) {
-            for (int u : automaton.get(v).get(symbol)) {
-                if (color1[u] == 0) {
+    private boolean dfs1(int v, Map<Integer, Integer> color1, Map<Integer, Integer> color2, Deque<T> path) {
+        color1.put(v, GRAY);
+        for (T symbol : get(v).keySet()) {
+            for (int u : get(v).get(symbol)) {
+                if (Objects.equals(color1.get(u), WHITE)) {
                     path.addLast(symbol);
                     if (dfs1(u, color1, color2, path)) {
                         return true;
@@ -97,19 +100,19 @@ public class Automaton<T> {
                 return true;
             }
         }
-        color1[v] = 2;
+        color1.put(v, BLACK);
         return false;
     }
 
-    private boolean dfs2(int v, int[] color1, int[] color2, Deque<T> path) {
-        color2[v] = 1;
-        for (T symbol : automaton.get(v).keySet()) {
-            for (int u : automaton.get(v).get(symbol)) {
-                if (color1[u] == 1) {
+    private boolean dfs2(int v, Map<Integer, Integer> color1, Map<Integer, Integer> color2, Deque<T> path) {
+        color2.put(v, GRAY);
+        for (T symbol : get(v).keySet()) {
+            for (int u : get(v).get(symbol)) {
+                if (Objects.equals(color1.get(u), GRAY)) {
                     path.addLast(symbol);
                     return true;
                 }
-                if (color2[u] == 0) {
+                if (Objects.equals(color2.get(u), WHITE)) {
                     path.addLast(symbol);
                     if (dfs2(u, color1, color2, path)) {
                         return true;
@@ -118,7 +121,7 @@ public class Automaton<T> {
                 }
             }
         }
-        color2[v] = 2;
+        color2.put(v, BLACK);
         return false;
     }
 }

@@ -2,10 +2,14 @@ package service;
 
 import lombok.extern.slf4j.Slf4j;
 import model.buchi.Automaton;
+import model.diagram.Diagram;
+import model.graph.Edge;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,11 +21,20 @@ import java.util.stream.IntStream;
  */
 @Slf4j
 public class AutomatonServiceTest {
+    private DiagramService diagramService;
     private AutomatonService automatonService;
 
     @Before
     public void setUp() {
+        diagramService = new DiagramService();
         automatonService = new AutomatonService();
+    }
+
+    @Test
+    public void convertation() throws IOException {
+        Diagram diagram = diagramService.parseDiagram(new File("data", "AChart.xstd"));
+        Automaton<Edge> automaton = automatonService.convertToGraph(diagram);
+        automaton.size();
     }
 
     @Test

@@ -1,8 +1,9 @@
 package service;
 
 import lombok.extern.slf4j.Slf4j;
+import model.buchi.Automaton;
 import model.diagram.Diagram;
-import model.graph.Graph;
+import model.graph.Edge;
 import org.junit.Test;
 
 import java.io.File;
@@ -18,7 +19,7 @@ public class GraphvizServiceTest {
     private static final File tempDiagramDir = new File("temp", "diagram");
     private static final File tempGraphDir = new File("temp", "graph");
     private DiagramService diagramService = new DiagramService();
-    private GraphService graphService = new GraphService();
+    private AutomatonService automatonService = new AutomatonService();
     private GraphvizService graphvizService = new GraphvizService();
 
     @Test
@@ -58,9 +59,9 @@ public class GraphvizServiceTest {
                 String file = xstdFile.getName().substring(0, xstdFile.getName().length() - 5);
                 log.info("File \"{}\" is processing...", xstdFile.getAbsoluteFile());
                 Diagram diagram = diagramService.parseDiagram(xstdFile);
-                Graph graph = graphService.convertToGraph(diagram);
+                Automaton<Edge> graph = automatonService.convertToGraph(diagram);
                 File dotFile = new File(tempGraphDir, file + ".dot");
-                graphService.convertToDot(graph, dotFile);
+                automatonService.saveAsDot(graph, dotFile);
                 File pdfFile = new File(tempGraphDir, file + ".pdf");
                 graphvizService.dot(dotFile, pdfFile);
             }
