@@ -8,15 +8,15 @@ import org.junit.Before;
  */
 public class VerifierServiceTest {
     private SystemService systemService;
-
     private AutomatonService automatonService;
-
+    private LtlService ltlService;
     private VerifierService verifierService;
 
     @Before
     public void setUp() {
+        ltlService = new LtlService();
         systemService = new SystemService();
         automatonService = new AutomatonService(systemService);
-        verifierService = new VerifierService(automatonService);
+        verifierService = new VerifierService(automatonService, ltlService);
     }
 }

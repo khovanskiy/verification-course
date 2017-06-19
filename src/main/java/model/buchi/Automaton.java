@@ -17,10 +17,7 @@ public class Automaton<T> {
     private final Set<Integer> acceptingSet;
     private int initialState;
 
-    public Automaton(int n) {
-        if (n < 1) {
-            throw new IllegalArgumentException();
-        }
+    public Automaton() {
         acceptingSet = new HashSet<>();
     }
 
@@ -42,7 +39,7 @@ public class Automaton<T> {
     }
 
     private void checkState(int state) {
-        /*if (state < 0 || state >= size()) {
+        /*if (!automaton.containsKey(state)) {
             throw new IllegalArgumentException();
         }*/
     }

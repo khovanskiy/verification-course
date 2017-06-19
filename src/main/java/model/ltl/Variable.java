@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Map;
+import java.util.function.Function;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
@@ -29,8 +30,8 @@ public class Variable<T> extends Formula<T> {
     }
 
     @Override
-    public <N> Formula<N> map(Map<T, N> mapping, N defaultValue) {
-        return new Variable<>(mapping.getOrDefault(name, defaultValue));
+    public <N> Formula<N> map(Function<? super T, ? extends N> mapper) {
+        return new Variable<>(mapper.apply(name));
     }
 
     @Override

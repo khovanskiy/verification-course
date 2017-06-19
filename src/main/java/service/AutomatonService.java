@@ -12,6 +12,7 @@ import model.graph.StateEdge;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.Triple;
 import util.StreamUtils;
 
 import java.io.File;
@@ -78,7 +79,7 @@ public class AutomatonService {
                 }
             }
         }
-        Automaton<Edge> automaton = new Automaton<>(1);
+        Automaton<Edge> automaton = new Automaton<>();
         AtomicInteger ids = new AtomicInteger(10000);
         Integer initId = null;
         for (Widget widget : diagram.getWidget()) {
@@ -161,10 +162,8 @@ public class AutomatonService {
     }
 
     public <T> Automaton<T> intersect(Automaton<T> a, Automaton<T> b) {
-        int n = a.size();
-        int m = b.size();
-        int size = n * m * 2;
-        Automaton<T> c = new Automaton<>(size);
+        Automaton<T> c = new Automaton<>();
+        Map<Triple<Integer, Integer, Integer>, Integer> tr = new HashMap<>();
         // Build all transitions
         for (Map.Entry<Integer, Map<T, List<Integer>>> e1 : a.getAutomaton().entrySet()) {
             int i = e1.getKey();
@@ -177,8 +176,8 @@ public class AutomatonService {
                 for (T t : commonEdges) {
                     for (int is : iState.get(t)) {
                         for (int js : jState.get(t)) {
-                            c.addTransition(convert(i, j, 0, m), convert(is, js, a.isAccepting(i) ? 1 : 0, m), t);
-                            c.addTransition(convert(i, j, 1, m), convert(is, js, a.isAccepting(j) ? 0 : 1, m), t);
+                            c.addTransition(convert(i, j, 0, tr), convert(is, js, a.isAccepting(i) ? 1 : 0, tr), t);
+                            c.addTransition(convert(i, j, 1, tr), convert(is, js, a.isAccepting(j) ? 0 : 1, tr), t);
                         }
                     }
                 }
@@ -186,16 +185,15 @@ public class AutomatonService {
         }
         // Accepting set of the new automaton
         for (int accB : b.getAcceptingSet()) {
-            // todo: validate this replacement
             for (int i : a.getAutomaton().keySet()) {
-                c.setAccepting(convert(i, accB, 1, m));
+                c.setAccepting(convert(i, accB, 1, tr));
             }
         }
-        c.setInitialState(convert(a.getInitialState(), b.getInitialState(), 0, m));
+        c.setInitialState(convert(a.getInitialState(), b.getInitialState(), 0, tr));
         return c;
     }
 
-    private static int convert(int stateA, int stateB, int flag, int sizeB) {
-        return 2 * stateA * sizeB + 2 * stateB + flag;
+    private static int convert(int stateA, int stateB, int flag, Map<Triple<Integer, Integer, Integer>, Integer> tr) {
+        return tr.computeIfAbsent(new Triple<>(stateA, stateB, flag), k -> tr.size());
     }
 }

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Map;
+import java.util.function.Function;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
@@ -34,8 +35,8 @@ public class BinaryFormula<T> extends Formula<T> {
     }
 
     @Override
-    public <N> Formula<N> map(Map<T, N> mapping, N defaultValue) {
-        return new BinaryFormula<>(operation, left.map(mapping, defaultValue), right.map(mapping, defaultValue));
+    public <N> Formula<N> map(Function<? super T, ? extends N> mapper) {
+        return new BinaryFormula<>(operation, left.map(mapper), right.map(mapper));
     }
 
     @Override

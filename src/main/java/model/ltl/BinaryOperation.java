@@ -16,10 +16,18 @@ public enum BinaryOperation {
         public <T> Formula<T> toNormalForm(Formula<T> left, Formula<T> right) {
             return new BinaryFormula<>(AND, left.toNormalForm(true), right.toNormalForm(true));
         }
+
+        public String toString(){
+            return "||";
+        }
     }, AND {
         @Override
         public <T> Formula<T> toNormalForm(Formula<T> left, Formula<T> right) {
             return new BinaryFormula<>(OR, left.toNormalForm(true), right.toNormalForm(true));
+        }
+
+        public String toString(){
+            return "&&";
         }
     };
 
