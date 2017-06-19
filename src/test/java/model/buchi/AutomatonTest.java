@@ -16,7 +16,7 @@ public class AutomatonTest {
     @Test
     public void loopPathTest() {
         log.info("loop test");
-        Automaton<String> a = new Automaton<>(1);
+        Automaton<String> a = new Automaton<>();
         a.addTransition(0, 0, "a");
         Assert.assertTrue(a.findAWord().isEmpty());
 
@@ -28,7 +28,7 @@ public class AutomatonTest {
     public void tailedPathTest() {
         log.info("lasso test");
         int n = 10;
-        Automaton<Integer> a = new Automaton<>(n + 1);
+        Automaton<Integer> a = new Automaton<>();
         for (int i = 0; i < n - 1; i++) {
             a.addTransition(i, i + 1, i);
         }

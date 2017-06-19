@@ -42,8 +42,8 @@ public class AutomatonServiceTest {
         log.info("intersection test");
         int an = 2;
         int bn = 4;
-        Automaton<Integer> a = new Automaton<>(an);
-        Automaton<Integer> b = new Automaton<>(bn);
+        Automaton<Integer> a = new Automaton<>();
+        Automaton<Integer> b = new Automaton<>();
         a.addTransition(0, 1, 0);
         a.addTransition(1, 0, 1);
 
