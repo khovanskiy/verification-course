@@ -3,6 +3,8 @@ package model.ltl;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.util.Map;
+
 @Getter
 @EqualsAndHashCode(callSuper = true)
 public class BinaryFormula<T> extends Formula<T> {
@@ -29,6 +31,11 @@ public class BinaryFormula<T> extends Formula<T> {
             return new BinaryFormula<>(operation, left.toNormalForm(false), right.toNormalForm(false));
         }
 
+    }
+
+    @Override
+    public <N> Formula<N> map(Map<T, N> mapping, N defaultValue) {
+        return new BinaryFormula<>(operation, left.map(mapping, defaultValue), right.map(mapping, defaultValue));
     }
 
     @Override
