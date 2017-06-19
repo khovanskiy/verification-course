@@ -14,4 +14,12 @@ public class Transition {
         this.expression = expression;
         this.stateName = stateName;
     }
+
+    public Formula<String> getExpression() {
+        return expression;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
 }

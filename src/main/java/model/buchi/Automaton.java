@@ -49,7 +49,7 @@ public class Automaton<T> {
     }
 
     public int size() {
-        return automaton.size();
+        return nodes.size();
     }
 
     public boolean isAccepting(int state) {

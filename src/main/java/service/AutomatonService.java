@@ -1,14 +1,13 @@
 package service;
 
-import model.buchi.Automaton;
-import model.buchi.BuchiLexer;
-import model.buchi.BuchiParser;
-import model.buchi.State;
+import model.buchi.*;
 import model.diagram.*;
 import model.graph.ActionEdge;
 import model.graph.Edge;
 import model.graph.EventEdge;
 import model.graph.StateEdge;
+import model.ltl.Formula;
+import model.ltl.LTL;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -35,7 +34,46 @@ public class AutomatonService {
         this.systemService = systemService;
     }
 
-    public List<State> buildFromLtl(String ltl) {
+    public Automaton<Formula<String>> createFromLtl(Formula<String> ltl) {
+        // todo: magic here
+        String string = ltl.toString();
+        return createFromLtl(string);
+    }
+
+    public Automaton<Formula<String>> createFromLtl(String ltl) {
+        List<State> states = createStateListFromLtl(ltl);
+        AtomicInteger ids = new AtomicInteger();
+        Map<String, Integer> idMap = new HashMap<>();
+        Automaton<Formula<String>> automaton = new Automaton<>();
+        for (State state : states) {
+            int nodeId = idMap.computeIfAbsent(state.getName(), k -> ids.getAndIncrement());
+            if (isAcceptance(state.getName())) {
+                automaton.setAccepting(nodeId);
+            }
+            if (isInit(state.getName())) {
+                automaton.setInitialState(nodeId);
+            }
+            for (Transition transition : state.getTransitions()) {
+                int nextId = idMap.computeIfAbsent(transition.getStateName(), k -> ids.getAndIncrement());
+                Formula<String> formula = transition.getExpression();
+                automaton.addTransition(nodeId, nextId, formula);
+                if (isAcceptance(transition.getStateName())) {
+                    automaton.setAccepting(nextId);
+                }
+                if (isInit(transition.getStateName())) {
+                    automaton.setInitialState(nextId);
+                }
+            }
+        }
+        for (int nodeId : automaton.getNodes()) {
+            if (automaton.get(nodeId).isEmpty()) {
+                automaton.addTransition(nodeId, nodeId, LTL.t());
+            }
+        }
+        return automaton;
+    }
+
+    public List<State> createStateListFromLtl(String ltl) {
         String[] command = new String[]{"ltl2ba/ltl2ba", "-f", ltl};
         return systemService.executeForRead(command, inputStream -> {
             try {
@@ -50,6 +88,14 @@ public class AutomatonService {
             }
             return null;
         });
+    }
+
+    public boolean isAcceptance(String name) {
+        return name.startsWith("accept_");
+    }
+
+    public boolean isInit(String name) {
+        return name.endsWith("_init");
     }
 
     public List<State> parse(String str) {

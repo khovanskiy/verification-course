@@ -14,4 +14,12 @@ public class State {
         this.name = name;
         this.transitions = transitions;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Transition> getTransitions() {
+        return transitions;
+    }
 }

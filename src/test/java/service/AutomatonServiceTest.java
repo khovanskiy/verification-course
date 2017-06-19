@@ -5,6 +5,7 @@ import model.buchi.Automaton;
 import model.buchi.State;
 import model.diagram.Diagram;
 import model.graph.Edge;
+import model.ltl.Formula;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,9 +68,15 @@ public class AutomatonServiceTest {
     }
 
     @Test
-    public void process() {
-        List<State> states = automatonService.buildFromLtl("([] <> x && y) || z -> w");
+    public void createStateListFromLtl() {
+        List<State> states = automatonService.createStateListFromLtl("([] <> x && y) || z -> w");
         Assert.assertEquals("States count", 4, states.size());
+    }
+
+    @Test
+    public void createFromLtl() {
+        Automaton<Formula<String>> automaton = automatonService.createFromLtl("([] <> x && y) || z -> w");
+        Assert.assertEquals("States count", 4, automaton.size());
     }
 
     @Test
