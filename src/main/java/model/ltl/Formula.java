@@ -3,6 +3,7 @@ package model.ltl;
 import lombok.EqualsAndHashCode;
 
 import java.util.Map;
+import java.util.function.Function;
 
 @EqualsAndHashCode
 public abstract class Formula<T> {
@@ -18,7 +19,7 @@ public abstract class Formula<T> {
      */
     public abstract Formula<T> toNormalForm(boolean negation);
 
-    public abstract <N> Formula<N> map(Map<T, N> mapping, N defaultValue);
+    public abstract <N> Formula<N> map(Function<? super T, ? extends N> mapper);
 
     public abstract void accept(LTLVisitor<T> visitor);
 

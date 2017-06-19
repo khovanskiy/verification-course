@@ -1,8 +1,6 @@
 package service;
 
-import model.ltl.Formula;
-import model.ltl.LTLLexer;
-import model.ltl.LTLParser;
+import model.ltl.*;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -18,5 +16,13 @@ public class LtlService {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         LTLParser parser = new LTLParser(tokens);
         return parser.ltl().f;
+    }
+
+    /**
+     * Transforms to spin format
+     * @param ltl formula with lowercase variables
+     */
+    public <T> String toSpin(Formula<T> ltl){
+        return ltl.toString().replace("R", "V");
     }
 }
