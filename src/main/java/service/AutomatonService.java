@@ -83,6 +83,9 @@ public class AutomatonService {
                 }
             }
         }
+        for (int nodeId : automaton.getAutomaton().keySet()) {
+            automaton.setAccepting(nodeId);
+        }
         return automaton;
     }
 
