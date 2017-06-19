@@ -13,6 +13,7 @@ public class Automaton<T> {
     private static final Integer GRAY = 1;
     private static final Integer BLACK = 2;
     private final Map<Integer, Map<T, List<Integer>>> automaton = new HashMap<>();
+    private final Set<Integer> nodes = new HashSet<>();
     private final Set<Integer> acceptingSet;
     private int initialState;
 
@@ -46,6 +47,10 @@ public class Automaton<T> {
         }*/
     }
 
+    public Set<Integer> getNodes() {
+        return nodes;
+    }
+
     public int size() {
         return automaton.size();
     }
@@ -57,10 +62,10 @@ public class Automaton<T> {
     public void addTransition(int stateA, int stateB, T symbol) {
         checkState(stateA);
         checkState(stateB);
+        nodes.add(stateA);
+        nodes.add(stateB);
         Map<T, List<Integer>> outgoings = get(stateA);
-        if (!outgoings.containsKey(symbol)) {
-            outgoings.put(symbol, new ArrayList<>());
-        }
+        outgoings.putIfAbsent(symbol, new ArrayList<>());
         outgoings.get(symbol).add(stateB);
     }
 
@@ -70,6 +75,7 @@ public class Automaton<T> {
 
     public void setAccepting(int state) {
         checkState(state);
+        nodes.add(state);
         acceptingSet.add(state);
     }
 

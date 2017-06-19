@@ -83,8 +83,16 @@ public class AutomatonService {
                 }
             }
         }
-        for (int nodeId : automaton.getAutomaton().keySet()) {
+        for (int nodeId : automaton.getNodes()) {
             automaton.setAccepting(nodeId);
+            if (automaton.get(nodeId).isEmpty()) {
+                automaton.addTransition(nodeId, nodeId, new Edge() {
+                    @Override
+                    public String toString() {
+                        return "true";
+                    }
+                });
+            }
         }
         return automaton;
     }
@@ -96,7 +104,13 @@ public class AutomatonService {
             for (Map.Entry<Integer, Map<T, List<Integer>>> entry : graph.getAutomaton().entrySet()) {
                 int nodeId = entry.getKey();
                 Map<T, List<Integer>> succesors = entry.getValue();
-                writer.println("\t" + PREFIX + nodeId + ";");
+                String shape;
+                if (graph.isAccepting(nodeId)) {
+                    shape = "doublecircle";
+                } else {
+                    shape = "circle";
+                }
+                writer.println("\t" + PREFIX + nodeId + "[shape=\"" + shape + "\"];");
                 for (Map.Entry<T, List<Integer>> outgoing : succesors.entrySet()) {
                     T symbol = outgoing.getKey();
                     List<Integer> next = outgoing.getValue();

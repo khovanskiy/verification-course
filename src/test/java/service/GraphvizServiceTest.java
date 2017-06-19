@@ -23,7 +23,7 @@ public class GraphvizServiceTest {
     private GraphvizService graphvizService = new GraphvizService();
 
     @Test
-    public void generate() throws IOException {
+    public void generateDiagrams() throws IOException {
         File[] xstdFiles = getDataFiles();
         if (xstdFiles != null) {
             for (File xstdFile : xstdFiles) {
@@ -52,8 +52,9 @@ public class GraphvizServiceTest {
     }
 
     @Test
-    public void generate2() throws IOException {
+    public void generateAutomatons() throws IOException {
         File[] xstdFiles = getDataFiles();
+        // new File[]{new File(dataDir, "VarParser.xstd")};
         if (xstdFiles != null) {
             for (File xstdFile : xstdFiles) {
                 String file = xstdFile.getName().substring(0, xstdFile.getName().length() - 5);
