@@ -12,6 +12,7 @@ import model.graph.StateEdge;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import util.StreamUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,28 @@ import java.util.stream.Collectors;
  */
 public class AutomatonService {
     private static final String PREFIX = "s";
+    private final SystemService systemService;
+
+    public AutomatonService(SystemService systemService) {
+        this.systemService = systemService;
+    }
+
+    public List<State> buildFromLtl(String ltl) {
+        String[] command = new String[]{"ltl2ba/ltl2ba", "-f", ltl};
+        return systemService.executeForRead(command, inputStream -> {
+            try {
+                String string = StreamUtils.toString(inputStream);
+                CharStream in = CharStreams.fromString(string);
+                BuchiLexer lexer = new BuchiLexer(in);
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                BuchiParser parser = new BuchiParser(tokens);
+                return parser.compilationUnit().list;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+    }
 
     public List<State> parse(String str) {
         CharStream in = CharStreams.fromString(str);

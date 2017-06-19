@@ -7,13 +7,16 @@ import org.junit.Before;
  * @since 1.0.0
  */
 public class VerifierServiceTest {
+    private SystemService systemService;
+
     private AutomatonService automatonService;
 
     private VerifierService verifierService;
 
     @Before
     public void setUp() {
-        automatonService = new AutomatonService();
+        systemService = new SystemService();
+        automatonService = new AutomatonService(systemService);
         verifierService = new VerifierService(automatonService);
     }
 }

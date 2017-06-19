@@ -70,7 +70,10 @@ cpyfile(char *src, char *tgt)
         inp = fopen(src, "r");
         out = fopen(tgt, "w");
         if (!inp || !out)
-        {       printf("ltl2ba: cannot cp %s to %s\n", src, tgt);
+        {       
+		printf("in %d:", inp);
+		printf("out %d:", out);
+		printf("ltl2ba: cannot cp %s to %s\n", src, tgt);
                 alldone(1);
         }
         while (fgets(buf, 1024, inp))

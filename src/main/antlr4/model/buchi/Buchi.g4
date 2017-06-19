@@ -62,6 +62,11 @@ literal
 
 WS  :	[ \t\r\n\f] -> skip;
 
+BlockComment
+    :   '/*' .*? '*/'
+        -> skip
+    ;
+
 StringLiteral
 	:	[a-zA-Z0-9_]+
 	;

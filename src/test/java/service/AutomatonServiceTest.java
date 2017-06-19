@@ -43,12 +43,14 @@ public class AutomatonServiceTest {
             "}";
 
     private DiagramService diagramService;
+    private SystemService systemService;
     private AutomatonService automatonService;
 
     @Before
     public void setUp() {
         diagramService = new DiagramService();
-        automatonService = new AutomatonService();
+        systemService = new SystemService();
+        automatonService = new AutomatonService(systemService);
     }
 
     @Test
@@ -61,7 +63,13 @@ public class AutomatonServiceTest {
     @Test
     public void parse() {
         List<State> states = automatonService.parse(output);
-        states.size();
+        Assert.assertEquals("States count", 4, states.size());
+    }
+
+    @Test
+    public void process() {
+        List<State> states = automatonService.buildFromLtl("([] <> x && y) || z -> w");
+        Assert.assertEquals("States count", 4, states.size());
     }
 
     @Test

@@ -19,8 +19,9 @@ public class GraphvizServiceTest {
     private static final File tempDiagramDir = new File("temp", "diagram");
     private static final File tempGraphDir = new File("temp", "graph");
     private DiagramService diagramService = new DiagramService();
-    private AutomatonService automatonService = new AutomatonService();
-    private GraphvizService graphvizService = new GraphvizService();
+    private SystemService systemService = new SystemService();
+    private AutomatonService automatonService = new AutomatonService(systemService);
+    private GraphvizService graphvizService = new GraphvizService(systemService);
 
     @Test
     public void generateDiagrams() throws IOException {
