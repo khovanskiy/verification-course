@@ -1,5 +1,6 @@
 package service;
 
+import com.google.common.collect.HashBiMap;
 import model.ltl.Formula;
 
 import java.util.HashMap;
@@ -18,6 +19,6 @@ public class VerifierService {
         Map<T, String> variableMap = new HashMap<>();
         ltl = ltl.toNormalForm(true);
         Formula<String> spin = ltl.map(k -> variableMap.computeIfAbsent(k, v -> "v" + variableMap.size()));
-        System.err.println(ltlService.toSpin(spin));
+        Map<String, T> oldNames = HashBiMap.create(variableMap).inverse();
     }
 }
