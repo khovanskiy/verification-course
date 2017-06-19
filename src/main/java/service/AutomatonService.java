@@ -172,17 +172,23 @@ public class AutomatonService {
                         Integer eventNodeId = ids.getAndIncrement();
                         automaton.addTransition(stateNode, eventNodeId, eventEdge);
 
-                        // action
-                        Formula<String> actionEdge = createFormulaFromActions(next.getAttributes().getActions());
-                        Integer actionNodeId = ids.getAndIncrement();
-                        automaton.addTransition(eventNodeId, actionNodeId, actionEdge);
+                        Integer lastNodeId = eventNodeId;
+                        // actions
+                        if (next.getAttributes().getActions() != null && !next.getAttributes().getActions().isEmpty()) {
+                            for (Action action : next.getAttributes().getActions()) {
+                                Formula<String> actionEdge = createFormulaFromActions(action);
+                                Integer actionNodeId = ids.getAndIncrement();
+                                automaton.addTransition(lastNodeId, actionNodeId, actionEdge);
+                                lastNodeId = actionNodeId;
+                            }
+                        }
 
                         // next state
                         Integer successorId = successors.get(outgoing.getId());
                         StateWidget nextState = (StateWidget) widgetMap.get(successorId);
                         Integer nextNode = nextState.getId();
                         Formula<String> nextEdge = createFormulaFromState(nextState);
-                        automaton.addTransition(actionNodeId, nextNode, nextEdge);
+                        automaton.addTransition(lastNodeId, nextNode, nextEdge);
                     } else {
                         throw new IllegalStateException();
                     }
@@ -206,12 +212,16 @@ public class AutomatonService {
         return LTL.var("E(" + event.getName() + ")");
     }
 
+    private Formula<String> createFormulaFromActions(Action action) {
+        return LTL.var("A(" + action.getName() + ")");
+    }
+
     private Formula<String> createFormulaFromActions(List<Action> actions) {
         if (actions == null || actions.isEmpty()) {
             return LTL.t();
         }
         List<Formula<String>> strings = actions.stream()
-                .map(a -> LTL.var("A(" + a.getName() + ")"))
+                .map(this::createFormulaFromActions)
                 .collect(Collectors.toList());
         Formula<String> current = strings.get(0);
         for (int i = 1; i < strings.size(); ++i) {
