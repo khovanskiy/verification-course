@@ -1,22 +1,28 @@
 package service;
 
+import lombok.extern.slf4j.Slf4j;
 import model.buchi.Automaton;
+import model.diagram.Diagram;
 import model.ltl.Formula;
 import model.ltl.LTL;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.stream.IntStream;
 
 /**
  * @author Victor Khovanskiy
  * @since 1.0.0
  */
+@Slf4j
 public class VerifierServiceTest {
     private SystemService systemService;
     private AutomatonService automatonService;
     private LtlService ltlService;
+    private DiagramService diagramService;
     private VerifierService verifierService;
 
     @Before
@@ -24,6 +30,7 @@ public class VerifierServiceTest {
         ltlService = new LtlService();
         systemService = new SystemService();
         automatonService = new AutomatonService(systemService);
+        diagramService = new DiagramService();
         verifierService = new VerifierService(automatonService, ltlService);
     }
 
@@ -46,5 +53,18 @@ public class VerifierServiceTest {
         Assert.assertNull(verifierService.verify(a, nextP));
         Assert.assertNotNull(verifierService.verify(a, futureA));
         Assert.assertNotNull(verifierService.verify(a, fail));
+    }
+
+    @Test
+    public void verifyExample() throws IOException {
+        Formula<String> ltl = LTL.future(LTL.var("S(Dot)"));
+        Diagram diagram = diagramService.parseDiagram(new File("data/VarParser.xstd"));
+        Automaton<Formula<String>> automaton = automatonService.createFromDiagram(diagram);
+        Iterable<Formula<String>> iterable = verifierService.verify(automaton, ltl);
+        if (iterable != null) {
+            for (Formula<String> f : iterable) {
+                log.info(f.toString());
+            }
+        }
     }
 }
