@@ -11,7 +11,7 @@ compilationUnit returns [List<State> list]
 {
     $list = new ArrayList<State>();
 }:
-'never' '{' (stateDefinition {$list.add($stateDefinition.s);})* '}' EOF;
+'never' '{' ((stateDefinition {$list.add($stateDefinition.s);})* '}' | false) EOF;
 
 stateDefinition returns [State s]
 @init
@@ -61,6 +61,9 @@ expression returns [Formula<String> f]:
         }
         ;
 
+false
+    : False;
+
 unit
     : Unit;
 
@@ -72,6 +75,10 @@ WS  :	[ \t\r\n\f] -> skip;
 BlockComment
     :   '/*' .*? '*/'
         -> skip
+    ;
+
+False
+    :   'false;'
     ;
 
 StringLiteral
