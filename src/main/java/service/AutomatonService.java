@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -231,7 +232,7 @@ public class AutomatonService {
         }
     }
 
-    public <T> Automaton<T> intersect(Automaton<T> a, Automaton<T> b) {
+    public <T> Automaton<T> intersect(Automaton<T> a, Automaton<T> b, Intersector<T> intersector) {
         Automaton<T> c = new Automaton<>();
         Map<Triple<Integer, Integer, Integer>, Integer> tr = new HashMap<>();
         // Build all transitions
@@ -241,13 +242,17 @@ public class AutomatonService {
             for (Map.Entry<Integer, Map<T, List<Integer>>> e2 : b.getAutomaton().entrySet()) {
                 int j = e2.getKey();
                 Map<T, List<Integer>> jState = e2.getValue();
-                Set<T> commonEdges = new LinkedHashSet<>(iState.keySet());
-                commonEdges.retainAll(jState.keySet());
-                for (T t : commonEdges) {
-                    for (int is : iState.get(t)) {
-                        for (int js : jState.get(t)) {
-                            c.addTransition(convert(i, j, 0, tr), convert(is, js, a.isAccepting(i) ? 1 : 0, tr), t);
-                            c.addTransition(convert(i, j, 1, tr), convert(is, js, a.isAccepting(j) ? 0 : 1, tr), t);
+                for (T iSymbol : iState.keySet()) {
+                    for (T jSymbol : jState.keySet()) {
+                        T t = intersector.intersect(iSymbol, jSymbol);
+                        if (t == null) {
+                            continue;
+                        }
+                        for (int is : iState.get(iSymbol)) {
+                            for (int js : jState.get(jSymbol)) {
+                                c.addTransition(convert(i, j, 0, tr), convert(is, js, a.isAccepting(i) ? 1 : 0, tr), t);
+                                c.addTransition(convert(i, j, 1, tr), convert(is, js, a.isAccepting(j) ? 0 : 1, tr), t);
+                            }
                         }
                     }
                 }

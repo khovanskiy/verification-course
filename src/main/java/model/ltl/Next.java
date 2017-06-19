@@ -17,7 +17,7 @@ public class Next<T> extends Formula<T> {
 
     @Override
     public String toString() {
-        return "(N " + f + ")";
+        return "(X " + f + ")";
     }
 
     @Override

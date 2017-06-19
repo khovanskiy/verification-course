@@ -2,6 +2,7 @@ package service;
 
 import lombok.extern.slf4j.Slf4j;
 import model.buchi.Automaton;
+import model.buchi.Intersector;
 import model.buchi.State;
 import model.diagram.Diagram;
 import model.graph.Edge;
@@ -124,9 +125,17 @@ public class AutomatonServiceTest {
         a.setAccepting(0);
         b.setAccepting(1);
 
-        Automaton<Integer> c = automatonService.intersect(a, b);
+        Automaton<Integer> c = automatonService.intersect(a, b, new MyIntersector());
         List<Integer> path = new ArrayList<>(c.findAWord());
         List<Integer> ref = IntStream.iterate(1, i -> i % 2).limit(path.size()).boxed().collect(Collectors.toList());
         Assert.assertEquals(path, ref);
+    }
+
+    private class MyIntersector implements Intersector<Integer>{
+
+        @Override
+        public Integer intersect(Integer a, Integer b) {
+            return a.equals(b) ? a : null;
+        }
     }
 }
