@@ -55,7 +55,14 @@ expression returns [Formula<String> f]:
         {
             $f = LTL.or($left.f, $right.f);
         }
+        |   unit
+        {
+            $f = LTL.t();
+        }
         ;
+
+unit
+    : Unit;
 
 literal
     : StringLiteral;
@@ -68,8 +75,11 @@ BlockComment
     ;
 
 StringLiteral
-	:	[a-zA-Z0-9_]+
+	:	[a-zA-Z][a-zA-Z0-9_]*
 	;
 
+Unit
+    :   '1'
+    ;
 
 

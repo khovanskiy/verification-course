@@ -17,12 +17,4 @@ public class LtlService {
         LTLParser parser = new LTLParser(tokens);
         return parser.ltl().f;
     }
-
-    /**
-     * Transforms to spin format
-     * @param ltl formula with lowercase variables
-     */
-    public <T> String toSpin(Formula<T> ltl){
-        return ltl.toString().replace("R", "V");
-    }
 }

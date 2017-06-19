@@ -1,5 +1,6 @@
 package service;
 
+import com.google.common.collect.HashBiMap;
 import model.buchi.*;
 import model.diagram.*;
 import model.graph.ActionEdge;
@@ -34,10 +35,13 @@ public class AutomatonService {
         this.systemService = systemService;
     }
 
-    public Automaton<Formula<String>> createFromLtl(Formula<String> ltl) {
-        // todo: magic here
-        String string = ltl.toString();
-        return createFromLtl(string);
+    public <T> Automaton<Formula<T>> createFromLtl(Formula<T> ltl) {
+        Map<T, String> variableMap = new HashMap<>();
+        Formula<String> lowercaseLTL = ltl.map(k -> variableMap.computeIfAbsent(k, v -> "v" + variableMap.size()));
+        String spin = lowercaseLTL.toString().replace("R", "V");
+        Map<String, T> oldNames = HashBiMap.create(variableMap).inverse();
+        Automaton<Formula<String>> automaton = createFromLtl(spin);
+        return map(automaton, t -> t.map(oldNames::get));
     }
 
     public Automaton<Formula<String>> createFromLtl(String ltl) {

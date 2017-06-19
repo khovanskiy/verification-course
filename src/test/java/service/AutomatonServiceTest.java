@@ -6,6 +6,7 @@ import model.buchi.State;
 import model.diagram.Diagram;
 import model.graph.Edge;
 import model.ltl.Formula;
+import model.ltl.LTL;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,6 +88,20 @@ public class AutomatonServiceTest {
     public void createFromLtl() {
         Automaton<Formula<String>> automaton = automatonService.createFromLtl("([] <> x && y) || z -> w");
         Assert.assertEquals("States count", 4, automaton.size());
+    }
+
+    @Test
+    public void createFromLtlFormula(){
+        Formula<String> ltl = LTL.not(LTL.globally(LTL.future(LTL.var("p"))));
+        Automaton<Formula<String>> automaton = automatonService.createFromLtl(ltl);
+        Automaton<Formula<String>> reference = new Automaton<>();
+        reference.addTransition(0, 0, LTL.t());
+        Formula<String> notP = LTL.not(LTL.var("p"));
+        reference.addTransition(0, 1, notP);
+        reference.addTransition(1, 1, notP);
+        reference.setAccepting(1);
+        reference.setInitialState(0);
+        Assert.assertEquals(reference, automaton);
     }
 
     @Test

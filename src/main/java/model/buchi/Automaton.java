@@ -1,5 +1,7 @@
 package model.buchi;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.*;
 
 /**
@@ -8,6 +10,7 @@ import java.util.*;
  *
  * @param <T> type of the alphabet
  */
+@EqualsAndHashCode
 public class Automaton<T> {
     private static final Integer WHITE = null;
     private static final Integer GRAY = 1;
