@@ -24,8 +24,8 @@ public class LtlServiceTest {
         Formula test = ltlService.parse("'c' -> 'd' -> 'a' & !'b' <-> 'e'");
         Assert.assertEquals(ref, test);
 
-        ref = ltlService.parse("X(G(F(('a' & 'b') U ('c' | 'd'))))");
-        test = ltlService.parse("XGF 'a' & 'b' U 'c' | 'd'");
+        ref = ltlService.parse("X(G(F(('ab' & 'b') U ('c' | 'd'))))");
+        test = ltlService.parse("XGF 'ab' & 'b' U 'c' | 'd'");
         Assert.assertEquals(ref, test);
     }
 }

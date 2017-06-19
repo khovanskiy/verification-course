@@ -113,12 +113,12 @@ StringLiteral
 
 fragment
 SingleQuoteSeq
-    :   '\'' (~['\\\r\n] | EscapeSeq) '\''
+    :   '\'' (~['\\\r\n] | EscapeSeq)+ '\''
     ;
 
 fragment
 DoubleQuoteSeq
-    :   '"' (~["\\\r\n] | EscapeSeq) '"'
+    :   '"' (~["\\\r\n] | EscapeSeq)+ '"'
     ;
 
 fragment
