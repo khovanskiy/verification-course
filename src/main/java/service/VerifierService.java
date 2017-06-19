@@ -1,7 +1,6 @@
 package service;
 
 import lombok.RequiredArgsConstructor;
-import model.buchi.Automaton;
 import model.ltl.*;
 import model.verifier.Node;
 
@@ -29,45 +28,32 @@ public class VerifierService {
         ltl = ltl.toNormalForm(true);
         Node<T> node = new Node<>();
         node.getIncoming().add(init);
-        node.getNovel().add(ltl);
-        return expand(node, new LinkedHashSet<>());
+        node.getNow().add(ltl);
+        Set<Node<T>> nodes = expand(node, new LinkedHashSet<>());
+        node = null;
+        return null;
     }
 
-    public <T> Iterable<T> check(Automaton<T> model, Formula<T> ltl) {
-        Node<T> init = new Node<>();
-        ltl = ltl.toNormalForm(true);
-        Node<T> node = new Node<>();
-        node.getIncoming().add(init);
-        node.getNovel().add(ltl);
-        Set<Node<T>> automaton = expand(node, new LinkedHashSet<>());
-        Automaton<T> ltlAutomaton = transform(init, automaton);
-        Automaton<T> badLang = automatonService.intersect(ltlAutomaton, model);
-        return badLang.findAWord();
-    }
-
-    private <T> Set<Node<T>> expand(Node<T> v, Set<Node<T>> nodes) {
-        if (v.getNovel().isEmpty()) {
-            for (Node<T> r : nodes) {
-                if (r.getOld().equals(v.getOld()) && r.getNext().equals(v.getNext())) {
-                    r.getIncoming().addAll(v.getIncoming());
+    private <T> Set<Node<T>> expand(Node<T> curr, Set<Node<T>> nodes) {
+        if (curr.getNow().isEmpty()) {
+            for (Node<T> q : nodes) {
+                if (q.getNow().equals(curr.getNow()) && q.getNext().equals(curr.getNext())) {
+                    q.getIncoming().addAll(curr.getIncoming());
                     return nodes;
                 }
             }
             Node<T> newNode = new Node<>();
-            newNode.getIncoming().add(v);
-            newNode.getNovel().addAll(v.getNext());
-            nodes.add(v);
+            newNode.getIncoming().add(curr);
+            newNode.getNow().addAll(curr.getNext());
+            nodes.add(curr);
             return expand(newNode, nodes);
         } else {
-            Formula<T> n = v.getNovel().iterator().next();
-            v.getNovel().remove(n);
-            if (v.getOld().contains(n)) {
-                return expand(v, nodes);
+            Formula<T> n = curr.getNow().iterator().next();
+            curr.getNow().remove(n);
+            if (curr.getOld().contains(n)) {
+                return expand(curr, nodes);
             }
-            if (v.getOld().contains(n.negation())) {
-                return nodes;
-            }
-            Visitor<T> visitor = new Visitor<>(v, nodes);
+            Visitor<T> visitor = new Visitor<>(curr, nodes);
             n.accept(visitor);
             return visitor.result;
         }
@@ -77,11 +63,6 @@ public class VerifierService {
         Node<T> newNode = new Node<>(current);
         newNode.getOld().add(n);
         return expand(newNode, nodes);
-    }
-
-    private <T> Automaton<T> transform(Node<T> init, Set<Node<T>> old) {
-        //TODO
-        return null;
     }
 
     @RequiredArgsConstructor
@@ -95,36 +76,36 @@ public class VerifierService {
             if (binary.getOperation() == OR) {
                 Node<T> newNode1 = new Node<>(current);
                 current.getOld().add(binary);
-                current.getNovel().add(binary.getLeft());
+                current.getNow().add(binary.getLeft());
                 Node<T> newNode2 = new Node<>(current);
                 newNode2.getOld().add(binary);
-                newNode2.getNovel().add(binary.getRight());
+                newNode2.getNow().add(binary.getRight());
                 result = expand(newNode2, expand(newNode1, nodes));
             }
             if (binary.getOperation() == AND) {
                 Node<T> newNode = new Node<>(current);
                 newNode.getOld().add(binary);
-                newNode.getNovel().addAll(asList(binary.getLeft(), binary.getRight()));
+                newNode.getNow().addAll(asList(binary.getLeft(), binary.getRight()));
                 result = expand(newNode, nodes);
             }
             if (binary.getOperation() == R) {
                 Node<T> newNode1 = new Node<>(current);
                 newNode1.getOld().add(binary);
-                newNode1.getNovel().add(binary.getLeft());
+                newNode1.getNow().addAll(asList(binary.getLeft(), binary.getRight()));
                 Node<T> newNode2 = new Node<>(current);
                 newNode2.getOld().add(binary);
-                newNode2.getNovel().addAll(asList(binary.getLeft(), binary.getRight()));
+                newNode2.getNow().add(binary.getRight());
                 newNode2.getNext().add(LTL.release(binary.getLeft(), binary.getRight()));
                 result = expand(newNode2, expand(newNode1, nodes));
             }
             if (binary.getOperation() == U) {
                 Node<T> newNode1 = new Node<>(current);
                 newNode1.getOld().add(binary);
-                newNode1.getNovel().add(binary.getLeft());
+                newNode1.getNow().add(binary.getLeft());
                 newNode1.getNext().add(LTL.until(binary.getLeft(), binary.getRight()));
                 Node<T> newNode2 = new Node<>(current);
                 newNode2.getOld().add(binary);
-                newNode2.getNovel().add(binary.getRight());
+                newNode2.getNow().add(binary.getRight());
                 result = expand(newNode2, expand(newNode1, nodes));
             }
         }
@@ -140,7 +121,11 @@ public class VerifierService {
 
         @Override
         public void visit(Not<T> formula) {
-            result = replace(current, nodes, formula);
+            if(current.getOld().contains(formula.negation())){
+                result = nodes;
+            } else {
+                result = replace(current, nodes, formula);
+            }
         }
 
         @Override

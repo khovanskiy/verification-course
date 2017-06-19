@@ -8,12 +8,12 @@ import java.util.Set;
 public class Node<T> {
     private final Set<Node<T>> incoming;
     private final Set<Formula<T>> old;
-    private final Set<Formula<T>> novel;
+    private final Set<Formula<T>> now;
     private final Set<Formula<T>> next;
 
     public Node() {
         old = new LinkedHashSet<>();
-        novel = new LinkedHashSet<>();
+        now = new LinkedHashSet<>();
         next = new LinkedHashSet<>();
         incoming = new LinkedHashSet<>();
     }
@@ -21,7 +21,7 @@ public class Node<T> {
     public Node(Node<T> node) {
         this.old = new LinkedHashSet<>(node.old);
         this.incoming = new LinkedHashSet<>(node.incoming);
-        this.novel = new LinkedHashSet<>(node.novel);
+        this.now = new LinkedHashSet<>(node.now);
         this.next = new LinkedHashSet<>(node.next);
     }
 
@@ -33,8 +33,8 @@ public class Node<T> {
         return old;
     }
 
-    public Set<Formula<T>> getNovel() {
-        return novel;
+    public Set<Formula<T>> getNow() {
+        return now;
     }
 
     public Set<Formula<T>> getNext() {
