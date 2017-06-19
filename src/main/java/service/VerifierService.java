@@ -14,11 +14,12 @@ public class VerifierService {
 
     /**
      * Verify automaton <code>automaton</code> according to ltl formula <code>ltl</code>
+     *
      * @param automaton automaton, transitions must have form of conjunction of some variables or be "true"
-     * @param ltl ltl formula
+     * @param ltl       ltl formula
      * @return counterexample if
      */
-    public <T> Iterable<Formula<T>> verify(Automaton<Formula<T>> automaton, Formula<T> ltl){
+    public <T> Iterable<Formula<T>> verify(Automaton<Formula<T>> automaton, Formula<T> ltl) {
         Automaton<Formula<T>> ltlAutomaton = automatonService.createFromLtl(LTL.not(ltl));
         LTLIntersector<T> intersector = new LTLIntersector<>();
         Automaton<Formula<T>> c = automatonService.intersect(automaton, ltlAutomaton, intersector);

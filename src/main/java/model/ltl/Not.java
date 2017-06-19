@@ -3,7 +3,6 @@ package model.ltl;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.util.Map;
 import java.util.function.Function;
 
 @Getter

@@ -3,10 +3,6 @@ package service;
 import com.google.common.collect.HashBiMap;
 import model.buchi.*;
 import model.diagram.*;
-import model.graph.ActionEdge;
-import model.graph.Edge;
-import model.graph.EventEdge;
-import model.graph.StateEdge;
 import model.ltl.Formula;
 import model.ltl.LTL;
 import org.antlr.v4.runtime.CharStream;
@@ -18,9 +14,10 @@ import util.StreamUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -131,7 +128,7 @@ public class AutomatonService {
         return parser.compilationUnit().list;
     }
 
-    public Automaton<Edge> createfromDiagram(Diagram diagram) {
+    public Automaton<Formula<String>> createFromDiagram(Diagram diagram) {
         Map<Integer, Widget> widgetMap = diagram.getWidget().stream().collect(Collectors.toMap(Widget::getId, Function.identity()));
         Map<Integer, Integer> successors = new HashMap<>();
         for (Widget widget : diagram.getWidget()) {
@@ -150,7 +147,7 @@ public class AutomatonService {
                 }
             }
         }
-        Automaton<Edge> automaton = new Automaton<>();
+        Automaton<Formula<String>> automaton = new Automaton<>();
         AtomicInteger ids = new AtomicInteger(10000);
         Integer initId = null;
         for (Widget widget : diagram.getWidget()) {
@@ -161,7 +158,7 @@ public class AutomatonService {
                     if (initId == null) {
                         initId = ids.getAndIncrement();
                     }
-                    Edge stateEdge = new StateEdge(state);
+                    Formula<String> stateEdge = createFormulaFromState(state);
                     automaton.addTransition(initId, stateNode, stateEdge);
                 }
                 if (state.getAttributes().getOutgoings() == null) {
@@ -171,12 +168,12 @@ public class AutomatonService {
                     Widget next = widgetMap.get(outgoing.getId());
                     if (next instanceof TransitionWidget) {
                         // event
-                        Edge eventEdge = new EventEdge(next.getAttributes().getEvent());
+                        Formula<String> eventEdge = createFormulaFromEvent(next.getAttributes().getEvent());
                         Integer eventNodeId = ids.getAndIncrement();
                         automaton.addTransition(stateNode, eventNodeId, eventEdge);
 
                         // action
-                        Edge actionEdge = new ActionEdge(next.getAttributes().getActions());
+                        Formula<String> actionEdge = createFormulaFromActions(next.getAttributes().getActions());
                         Integer actionNodeId = ids.getAndIncrement();
                         automaton.addTransition(eventNodeId, actionNodeId, actionEdge);
 
@@ -184,7 +181,7 @@ public class AutomatonService {
                         Integer successorId = successors.get(outgoing.getId());
                         StateWidget nextState = (StateWidget) widgetMap.get(successorId);
                         Integer nextNode = nextState.getId();
-                        Edge nextEdge = new StateEdge(nextState);
+                        Formula<String> nextEdge = createFormulaFromState(nextState);
                         automaton.addTransition(actionNodeId, nextNode, nextEdge);
                     } else {
                         throw new IllegalStateException();
@@ -195,15 +192,32 @@ public class AutomatonService {
         for (int nodeId : automaton.getNodes()) {
             automaton.setAccepting(nodeId);
             if (automaton.get(nodeId).isEmpty()) {
-                automaton.addTransition(nodeId, nodeId, new Edge() {
-                    @Override
-                    public String toString() {
-                        return "true";
-                    }
-                });
+                automaton.addTransition(nodeId, nodeId, LTL.t());
             }
         }
         return automaton;
+    }
+
+    private Formula<String> createFormulaFromState(StateWidget state) {
+        return LTL.var("S(" + state.getAttributes().getName() + ")");
+    }
+
+    private Formula<String> createFormulaFromEvent(Event event) {
+        return LTL.var("E(" + event.getName() + ")");
+    }
+
+    private Formula<String> createFormulaFromActions(List<Action> actions) {
+        if (actions == null || actions.isEmpty()) {
+            return LTL.t();
+        }
+        List<Formula<String>> strings = actions.stream()
+                .map(a -> LTL.var("A(" + a.getName() + ")"))
+                .collect(Collectors.toList());
+        Formula<String> current = strings.get(0);
+        for (int i = 1; i < strings.size(); ++i) {
+            current = LTL.and(current, strings.get(i));
+        }
+        return current;
     }
 
     public <T> void saveAsDot(Automaton<T> graph, File file) throws IOException {

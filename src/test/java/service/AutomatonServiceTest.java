@@ -5,7 +5,6 @@ import model.buchi.Automaton;
 import model.buchi.Intersector;
 import model.buchi.State;
 import model.diagram.Diagram;
-import model.graph.Edge;
 import model.ltl.Formula;
 import model.ltl.LTL;
 import org.junit.Assert;
@@ -59,7 +58,7 @@ public class AutomatonServiceTest {
     @Test
     public void createFromDiagram() throws IOException {
         Diagram diagram = diagramService.parseDiagram(new File("data", "AChart.xstd"));
-        Automaton<Edge> automaton = automatonService.createfromDiagram(diagram);
+        Automaton<Formula<String>> automaton = automatonService.createFromDiagram(diagram);
         automaton.size();
     }
 
@@ -72,8 +71,8 @@ public class AutomatonServiceTest {
     @Test
     public void map() throws IOException {
         Diagram diagram = diagramService.parseDiagram(new File("data", "AChart.xstd"));
-        Automaton<Edge> automatonA = automatonService.createfromDiagram(diagram);
-        Automaton<String> automatonB = automatonService.map(automatonA, Edge::toString);
+        Automaton<Formula<String>> automatonA = automatonService.createFromDiagram(diagram);
+        Automaton<String> automatonB = automatonService.map(automatonA, Formula::toString);
         Assert.assertEquals("Automaton Size", automatonA.size(), automatonB.size());
         Assert.assertEquals("Automaton Initial State", automatonA.getInitialState(), automatonB.getInitialState());
         Assert.assertEquals("Automaton Accepting Set", automatonA.getAcceptingSet(), automatonB.getAcceptingSet());

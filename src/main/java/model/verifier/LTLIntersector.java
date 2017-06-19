@@ -6,16 +6,18 @@ import model.ltl.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static model.ltl.BinaryOperation.*;
+import static model.ltl.BinaryOperation.AND;
+import static model.ltl.BinaryOperation.OR;
 
 /**
  * This class intersects two formulas, where first is conjunction of variables and second - propositional formula
+ *
  * @param <T>
  */
 public class LTLIntersector<T> implements Intersector<Formula<T>> {
     @Override
     public Formula<T> intersect(Formula<T> a, Formula<T> b) {
-        if(a.equals(LTL.t())){
+        if (a.equals(LTL.t())) {
             return a;
         }
         VariableVisitor visitor = new VariableVisitor();
@@ -26,15 +28,15 @@ public class LTLIntersector<T> implements Intersector<Formula<T>> {
         return markVisitor.getMark() ? a : null;
     }
 
-    private class MarkVisitor implements LTLVisitor<T>{
+    private class MarkVisitor implements LTLVisitor<T> {
         private boolean mark;
         private Set<Variable<T>> trues;
 
-        public MarkVisitor(Set<Variable<T>> trueVariables){
+        public MarkVisitor(Set<Variable<T>> trueVariables) {
             trues = trueVariables;
         }
 
-        public boolean getMark(){
+        public boolean getMark() {
             return mark;
         }
 
@@ -44,10 +46,10 @@ public class LTLIntersector<T> implements Intersector<Formula<T>> {
             boolean left = mark;
             binary.getRight().accept(this);
             boolean right = mark;
-            if(binary.getOperation() == OR){
+            if (binary.getOperation() == OR) {
                 mark = left || right;
             }
-            if(binary.getOperation() == AND){
+            if (binary.getOperation() == AND) {
                 mark = left && right;
             }
             throw new IllegalArgumentException();
@@ -75,8 +77,12 @@ public class LTLIntersector<T> implements Intersector<Formula<T>> {
         }
     }
 
-    private class VariableVisitor implements LTLVisitor<T>{
+    private class VariableVisitor implements LTLVisitor<T> {
         private Set<Variable<T>> variables = new HashSet<>();
+
+        Set<Variable<T>> getResult() {
+            return variables;
+        }
 
         @Override
         public void visit(BinaryFormula<T> binary) {
@@ -107,8 +113,6 @@ public class LTLIntersector<T> implements Intersector<Formula<T>> {
             variables.add(variable);
         }
 
-        Set<Variable<T>> getResult(){
-            return variables;
-        }
+
     }
 }

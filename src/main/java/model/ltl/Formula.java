@@ -2,7 +2,6 @@ package model.ltl;
 
 import lombok.EqualsAndHashCode;
 
-import java.util.Map;
 import java.util.function.Function;
 
 @EqualsAndHashCode

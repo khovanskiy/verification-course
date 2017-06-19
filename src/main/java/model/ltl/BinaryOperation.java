@@ -17,7 +17,7 @@ public enum BinaryOperation {
             return new BinaryFormula<>(AND, left.toNormalForm(true), right.toNormalForm(true));
         }
 
-        public String toString(){
+        public String toString() {
             return "||";
         }
     }, AND {
@@ -26,7 +26,7 @@ public enum BinaryOperation {
             return new BinaryFormula<>(OR, left.toNormalForm(true), right.toNormalForm(true));
         }
 
-        public String toString(){
+        public String toString() {
             return "&&";
         }
     };
