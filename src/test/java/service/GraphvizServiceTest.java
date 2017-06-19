@@ -61,7 +61,7 @@ public class GraphvizServiceTest {
                 String file = xstdFile.getName().substring(0, xstdFile.getName().length() - 5);
                 log.info("File \"{}\" is processing...", xstdFile.getAbsoluteFile());
                 Diagram diagram = diagramService.parseDiagram(xstdFile);
-                Automaton<Edge> graph = automatonService.convertToGraph(diagram);
+                Automaton<Edge> graph = automatonService.createfromDiagram(diagram);
                 File dotFile = new File(tempGraphDir, file + ".dot");
                 automatonService.saveAsDot(graph, dotFile);
                 File pdfFile = new File(tempGraphDir, file + ".pdf");

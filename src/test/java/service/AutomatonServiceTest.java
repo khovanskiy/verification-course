@@ -55,9 +55,9 @@ public class AutomatonServiceTest {
     }
 
     @Test
-    public void convertation() throws IOException {
+    public void createFromDiagram() throws IOException {
         Diagram diagram = diagramService.parseDiagram(new File("data", "AChart.xstd"));
-        Automaton<Edge> automaton = automatonService.convertToGraph(diagram);
+        Automaton<Edge> automaton = automatonService.createfromDiagram(diagram);
         automaton.size();
     }
 
@@ -65,6 +65,16 @@ public class AutomatonServiceTest {
     public void parse() {
         List<State> states = automatonService.parse(output);
         Assert.assertEquals("States count", 4, states.size());
+    }
+
+    @Test
+    public void map() throws IOException {
+        Diagram diagram = diagramService.parseDiagram(new File("data", "AChart.xstd"));
+        Automaton<Edge> automatonA = automatonService.createfromDiagram(diagram);
+        Automaton<String> automatonB = automatonService.map(automatonA, Edge::toString);
+        Assert.assertEquals("Automaton Size", automatonA.size(), automatonB.size());
+        Assert.assertEquals("Automaton Initial State", automatonA.getInitialState(), automatonB.getInitialState());
+        Assert.assertEquals("Automaton Accepting Set", automatonA.getAcceptingSet(), automatonB.getAcceptingSet());
     }
 
     @Test

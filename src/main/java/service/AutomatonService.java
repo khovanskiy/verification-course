@@ -98,6 +98,26 @@ public class AutomatonService {
         return name.endsWith("_init");
     }
 
+    public <A, B> Automaton<B> map(Automaton<A> input, Function<A, B> mapper) {
+        Automaton<B> output = new Automaton<>();
+        for (Map.Entry<Integer, Map<A, List<Integer>>> entry : input.getAutomaton().entrySet()) {
+            int nodeId = entry.getKey();
+            Map<A, List<Integer>> successors = entry.getValue();
+            for (Map.Entry<A, List<Integer>> i : successors.entrySet()) {
+                A a = i.getKey();
+                B b = mapper.apply(a);
+                for (int nextId : i.getValue()) {
+                    output.addTransition(nodeId, nextId, b);
+                }
+            }
+        }
+        for (int nodeId : input.getAcceptingSet()) {
+            output.setAccepting(nodeId);
+        }
+        output.setInitialState(input.getInitialState());
+        return output;
+    }
+
     public List<State> parse(String str) {
         CharStream in = CharStreams.fromString(str);
         BuchiLexer lexer = new BuchiLexer(in);
@@ -106,7 +126,7 @@ public class AutomatonService {
         return parser.compilationUnit().list;
     }
 
-    public Automaton<Edge> convertToGraph(Diagram diagram) {
+    public Automaton<Edge> createfromDiagram(Diagram diagram) {
         Map<Integer, Widget> widgetMap = diagram.getWidget().stream().collect(Collectors.toMap(Widget::getId, Function.identity()));
         Map<Integer, Integer> successors = new HashMap<>();
         for (Widget widget : diagram.getWidget()) {
