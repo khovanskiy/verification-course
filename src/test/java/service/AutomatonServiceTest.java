@@ -2,6 +2,7 @@ package service;
 
 import lombok.extern.slf4j.Slf4j;
 import model.buchi.Automaton;
+import model.buchi.State;
 import model.diagram.Diagram;
 import model.graph.Edge;
 import org.junit.Assert;
@@ -21,6 +22,26 @@ import java.util.stream.IntStream;
  */
 @Slf4j
 public class AutomatonServiceTest {
+    private static final String output = "never {\n" +
+            "T0_init:\n" +
+            "\tif\n" +
+            "\t:: (w) || (!z && !y) -> goto accept_all\n" +
+            "\t:: (!z) -> goto T0_S4\n" +
+            "\t:: (!z && !x) -> goto accept_S5\n" +
+            "\tfi;\n" +
+            "T0_S4:\n" +
+            "\tif\n" +
+            "\t:: (1) -> goto T0_S4\n" +
+            "\t:: (!x) -> goto accept_S5\n" +
+            "\tfi;\n" +
+            "accept_S5:\n" +
+            "\tif\n" +
+            "\t:: (!x) -> goto accept_S5\n" +
+            "\tfi;\n" +
+            "accept_all:\n" +
+            "    skip\n" +
+            "}";
+
     private DiagramService diagramService;
     private AutomatonService automatonService;
 
@@ -35,6 +56,12 @@ public class AutomatonServiceTest {
         Diagram diagram = diagramService.parseDiagram(new File("data", "AChart.xstd"));
         Automaton<Edge> automaton = automatonService.convertToGraph(diagram);
         automaton.size();
+    }
+
+    @Test
+    public void parse() {
+        List<State> states = automatonService.parse(output);
+        states.size();
     }
 
     @Test

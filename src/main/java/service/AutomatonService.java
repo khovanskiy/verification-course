@@ -1,11 +1,17 @@
 package service;
 
 import model.buchi.Automaton;
+import model.buchi.BuchiLexer;
+import model.buchi.BuchiParser;
+import model.buchi.State;
 import model.diagram.*;
 import model.graph.ActionEdge;
 import model.graph.Edge;
 import model.graph.EventEdge;
 import model.graph.StateEdge;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +27,14 @@ import java.util.stream.Collectors;
  */
 public class AutomatonService {
     private static final String PREFIX = "s";
+
+    public List<State> parse(String str) {
+        CharStream in = CharStreams.fromString(str);
+        BuchiLexer lexer = new BuchiLexer(in);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        BuchiParser parser = new BuchiParser(tokens);
+        return parser.compilationUnit().list;
+    }
 
     public Automaton<Edge> convertToGraph(Diagram diagram) {
         Map<Integer, Widget> widgetMap = diagram.getWidget().stream().collect(Collectors.toMap(Widget::getId, Function.identity()));
