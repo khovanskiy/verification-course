@@ -18,14 +18,12 @@ public class LtlServiceTest {
     }
 
     @Test
-    public void priorityTest() {
-        log.info("operators' priority test");
-        Formula ref = ltlService.parse("('c' -> ('d' -> ('a' & !('b')))) <-> 'e'");
-        Formula test = ltlService.parse("'c' -> 'd' -> 'a' & !'b' <-> 'e'");
+    public void parse() {
+        Formula ref = ltlService.parse("('a' | ('b' R 'c'))");
+        Formula test = ltlService.parse("'a' | 'b' R 'c'");
         Assert.assertEquals(ref, test);
-
-        ref = ltlService.parse("X(G(F(('ab' & 'b') U ('c' | 'd'))))");
-        test = ltlService.parse("XGF 'ab' & 'b' U 'c' | 'd'");
+        ref = ltlService.parse("('a' && (X 'b') U ((F 'a') & 'b'))");
+        test = ltlService.parse("'a' && X 'b' U (F 'a' & 'b')");
         Assert.assertEquals(ref, test);
     }
 }

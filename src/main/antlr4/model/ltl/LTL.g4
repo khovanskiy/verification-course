@@ -10,6 +10,26 @@ ltl returns [Formula<String> f]
     {
         $f = $primary.f;
     }
+    |   NEXT ltl
+    {
+        $f = LTL.next($ltl.f);
+    }
+    |   GLOB ltl
+    {
+        $f = LTL.globally($ltl.f);
+    }
+    |   FUTURE ltl
+    {
+        $f = LTL.future($ltl.f);
+    }
+    |   l=ltl RELEASE r=ltl
+    {
+      $f = LTL.release($l.f, $r.f);
+    }
+    |   l=ltl UNTIL r=ltl
+    {
+    $f = LTL.until($l.f, $r.f);
+    }
     |   l=ltl CON r=ltl
     {
         $f = LTL.and($l.f, $r.f);
@@ -25,26 +45,6 @@ ltl returns [Formula<String> f]
     |   l=ltl EQ r=ltl
     {
         $f = LTL.eq($l.f, $r.f);
-    }
-    |   l=ltl RELEASE r=ltl
-    {
-        $f = LTL.release($l.f, $r.f);
-    }
-    |   l=ltl UNTIL r=ltl
-    {
-      $f = LTL.until($l.f, $r.f);
-    }
-    |   NEXT ltl
-    {
-        $f = LTL.next($ltl.f);
-    }
-    |   GLOB ltl
-    {
-        $f = LTL.globally($ltl.f);
-    }
-    |   FUTURE ltl
-    {
-        $f = LTL.future($ltl.f);
     }
     ;
 
