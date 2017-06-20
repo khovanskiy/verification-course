@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class VerifierServiceTest {
     private static final File dataDir = new File("data");
-    private static final File tempLogs = new File("temp", "logs");
 
     private AutomatonService automatonService;
     private LtlService ltlService;
@@ -42,9 +41,6 @@ public class VerifierServiceTest {
 
     @Test
     public void verify() throws IOException {
-        if (tempLogs.mkdirs()) {
-            log.info("The temporary directory \"{}\" is created", tempLogs.getAbsoluteFile());
-        }
         for(String model : getModelNames()) {
             log.info("Testing model " + model);
             File modelFile = resolve(model, ".xstd");
@@ -61,10 +57,13 @@ public class VerifierServiceTest {
         try(Scanner scanner = new Scanner(ltl)){
             while (scanner.hasNextLine()){
                 String formula = scanner.nextLine();
-                log.info("Checking formula: " + formula);
+                log.info("Checking " + (iscorrect ? "correct" : "incorrect") + " formula: " + formula);
                 Formula<String> f = ltlService.parse(formula);
                 Iterable<Formula<String>> ex = verifierService.verify(a, f);
                 if(iscorrect){
+                    if(ex != null){
+                        log.warn("failed: "+ ex.toString());
+                    }
                     Assert.assertNull(ex);
                 } else {
                     Assert.assertNotNull(ex);
