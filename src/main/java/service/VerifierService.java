@@ -8,7 +8,7 @@ import model.verifier.LTLIntersector;
 public class VerifierService {
     private final AutomatonService automatonService;
 
-    public VerifierService(AutomatonService automatonService, LtlService ltlService) {
+    public VerifierService(AutomatonService automatonService) {
         this.automatonService = automatonService;
     }
 
@@ -25,5 +25,13 @@ public class VerifierService {
         Automaton<Formula<T>> c = automatonService.intersect(automaton, ltlAutomaton, intersector);
         Iterable<Formula<T>> example = c.findAWord();
         return example.iterator().hasNext() ? example : null;
+    }
+
+    public <T> String exampleToString(Iterable<Formula<T>> example){
+        StringBuilder result = new StringBuilder();
+        for(Formula<T> step : example){
+            result.append(step).append("\n");
+        }
+        return result.toString();
     }
 }

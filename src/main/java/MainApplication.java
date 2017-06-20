@@ -3,6 +3,10 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import lombok.extern.slf4j.Slf4j;
+import model.buchi.Automaton;
+import model.diagram.Diagram;
+import model.ltl.Formula;
+import service.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,6 +28,24 @@ public class MainApplication {
     public static void main(String[] args) {
         try {
             parseArgs(args);
+            DiagramService diagramService = new DiagramService();
+            SystemService systemService = new SystemService();
+            AutomatonService automatonService = new AutomatonService(systemService);
+            LtlService ltlService = new LtlService();
+            VerifierService verifierService = new VerifierService(automatonService);
+            Diagram diagram = diagramService.parseDiagram(modelFile);
+            Automaton<Formula<String>> automaton = automatonService.createFromDiagram(diagram);
+            while(ltlScanner.hasNextLine()){
+                String formula = ltlScanner.nextLine();
+                Formula<String> ltl = ltlService.parse(formula);
+                Iterable<Formula<String>> counterexample = verifierService.verify(automaton, ltl);
+                if(counterexample != null){
+                    System.out.println("Counterexample for the formula " + formula + ": ");
+                    System.out.println(verifierService.exampleToString(counterexample));
+                } else {
+                    System.out.println("LTL formula " + formula + " is correct for the automaton.");
+                }
+            }
         } catch (IOException e) {
             // Option parser exception. Scanner never throws IOException
             System.exit(1);
@@ -53,9 +75,13 @@ public class MainApplication {
                     .availableUnless("i", "ltl").withRequiredArg().ofType(String.class);
 
             OptionSet options = optionParser.parse(args);
-            if (options.has("h") || !(options.has("i") || options.has("f") || options.has("l"))) {
-                System.err.println("You should specify at least one LTL formula\n");
-                optionParser.printHelpOn(System.err);
+            if(options.has("h")){
+                optionParser.printHelpOn(System.out);
+                System.exit(0);
+            }
+            if (!(options.has("i") || options.has("f") || options.has("l"))) {
+                System.err.println("You should specify at least one LTL formula. See -h for help");
+                System.exit(1);
             }
             modelFile = new File(options.valueOf(model));
             if (options.has("interactive")) {
@@ -74,6 +100,7 @@ public class MainApplication {
         } catch (OptionException e) {
             System.err.println(e.getMessage() + "\n");
             optionParser.printHelpOn(System.err);
+            System.exit(1);
         }
     }
 }

@@ -31,7 +31,7 @@ public class VerifierServiceTest {
         systemService = new SystemService();
         automatonService = new AutomatonService(systemService);
         diagramService = new DiagramService();
-        verifierService = new VerifierService(automatonService, ltlService);
+        verifierService = new VerifierService(automatonService);
     }
 
     @Test
