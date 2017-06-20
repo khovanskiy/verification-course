@@ -84,7 +84,7 @@ public class Automaton<T> {
         Map<Integer, Integer> color1 = new HashMap<>();
         Map<Integer, Integer> color2 = new HashMap<>();
         Deque<T> path = new ArrayDeque<>();
-        dfs1(0, color1, color2, path);
+        dfs1(initialState, color1, color2, path);
         return path;
     }
 
