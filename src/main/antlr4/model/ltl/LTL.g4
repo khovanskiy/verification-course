@@ -114,3 +114,5 @@ EscapeSeq
     ;
 
 WS  :	[ \t\r\n\f] -> skip;
+
+ErrorChar : . ;

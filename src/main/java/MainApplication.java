@@ -37,14 +37,20 @@ public class MainApplication {
             Automaton<Formula<String>> automaton = automatonService.createFromDiagram(diagram);
             while(ltlScanner.hasNextLine()){
                 String formula = ltlScanner.nextLine();
+                System.out.println("Considering the formula " + formula);
                 Formula<String> ltl = ltlService.parse(formula);
-                Iterable<Formula<String>> counterexample = verifierService.verify(automaton, ltl);
-                if(counterexample != null){
-                    System.out.println("Counterexample for the formula " + formula + ": ");
-                    System.out.println(verifierService.exampleToString(counterexample));
+                if(ltl == null){
+                    System.err.println("Errors occurred while parsing ltl formula");
                 } else {
-                    System.out.println("LTL formula " + formula + " is correct for the automaton.");
+                    Iterable<Formula<String>> counterexample = verifierService.verify(automaton, ltl);
+                    if (counterexample != null) {
+                        System.out.println("Counterexample for the formula: ");
+                        System.out.println(verifierService.exampleToString(counterexample));
+                    } else {
+                        System.out.println("The ltl formula is correct for the automaton.");
+                    }
                 }
+                System.out.println();
             }
         } catch (IOException e) {
             // Option parser exception. Scanner never throws IOException

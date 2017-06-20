@@ -17,6 +17,7 @@ public class LtlService {
         LTLLexer lexer = new LTLLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         LTLParser parser = new LTLParser(tokens);
-        return parser.ltl().f;
+        Formula<String> ltl = parser.ltl().f;
+        return parser.getNumberOfSyntaxErrors() == 0 ? ltl : null;
     }
 }
