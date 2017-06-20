@@ -25,5 +25,12 @@ public class LtlServiceTest {
         ref = ltlService.parse("('a' && (X 'b') U ((F 'a') & 'b'))");
         test = ltlService.parse("'a' && X 'b' U (F 'a' & 'b')");
         Assert.assertEquals(ref, test);
+        ref = ltlService.parse("('a' R 'b') U 'c'");
+        test = ltlService.parse("'a' R 'b' U 'c'");
+        System.err.println(ref);
+        Assert.assertEquals(ref, test);
+        ref = ltlService.parse("('a' U 'b') R 'c'");
+        test = ltlService.parse("'a' U 'b' R 'c'");
+        Assert.assertEquals(ref, test);
     }
 }
