@@ -10,8 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.stream.IntStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  * @author Victor Khovanskiy
@@ -19,7 +23,9 @@ import java.util.stream.IntStream;
  */
 @Slf4j
 public class VerifierServiceTest {
-    private SystemService systemService;
+    private static final File dataDir = new File("data");
+    private static final File tempLogs = new File("temp", "logs");
+
     private AutomatonService automatonService;
     private LtlService ltlService;
     private DiagramService diagramService;
@@ -28,31 +34,52 @@ public class VerifierServiceTest {
     @Before
     public void setUp() {
         ltlService = new LtlService();
-        systemService = new SystemService();
+        SystemService systemService = new SystemService();
         automatonService = new AutomatonService(systemService);
         diagramService = new DiagramService();
         verifierService = new VerifierService(automatonService);
     }
 
     @Test
-    public void verify(){
-        Formula<String> alwaysP = ltlService.parse("G'p'");
-        Formula<String> nextP = ltlService.parse("X'p'");
-        Formula<String> futureA = ltlService.parse("F'a'");
-        Formula<String> fail = ltlService.parse("XXXXXXXXG'd'");
-        Formula<String> p = LTL.var("p");
-        Automaton<Formula<String>> a = new Automaton<>();
-        a.addTransition(0, 1, p);
-        a.addTransition(1, 2, p);
-        a.addTransition(2, 1, LTL.var("a"));
-        a.addTransition(2, 3, p);
-        a.addTransition(3, 3, LTL.t());
-        a.setInitialState(0);
-        IntStream.range(0, 4).forEach(a::setAccepting);
-        Assert.assertNotNull(verifierService.verify(a, alwaysP));
-        Assert.assertNull(verifierService.verify(a, nextP));
-        Assert.assertNotNull(verifierService.verify(a, futureA));
-        Assert.assertNotNull(verifierService.verify(a, fail));
+    public void verify() throws IOException {
+        if (tempLogs.mkdirs()) {
+            log.info("The temporary directory \"{}\" is created", tempLogs.getAbsoluteFile());
+        }
+        for(String model : getModelNames()) {
+            log.info("Testing model " + model);
+            File modelFile = resolve(model, ".xstd");
+            Diagram diagram = diagramService.parseDiagram(modelFile);
+            Automaton<Formula<String>> automaton = automatonService.createFromDiagram(diagram);
+            File correct = resolve(model, ".ltl.correct");
+            File incorrect = resolve(model, ".ltl.incorrect");
+            check(automaton, correct, true);
+            check(automaton, incorrect, false);
+        }
+    }
+
+    private void check(Automaton<Formula<String>> a, File ltl, boolean iscorrect) {
+        try(Scanner scanner = new Scanner(ltl)){
+            while (scanner.hasNextLine()){
+                String formula = scanner.nextLine();
+                log.info("Checking formula: " + formula);
+                Formula<String> f = ltlService.parse(formula);
+                Iterable<Formula<String>> ex = verifierService.verify(a, f);
+                if(iscorrect){
+                    Assert.assertNull(ex);
+                } else {
+                    Assert.assertNotNull(ex);
+                }
+            }
+        } catch (FileNotFoundException ignored) {}
+    }
+
+    private List<String> getModelNames() {
+        File[] files = dataDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".xstd"));
+        return Arrays.stream(files).map(x -> x.getName().replace(".xstd", "")).collect(Collectors.toList());
+    }
+
+    private File resolve(String model, String extension){
+        return dataDir.toPath().resolve(model + extension).toFile();
     }
 
     @Test
