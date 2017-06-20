@@ -1,1 +1,5 @@
+true
 'E(machine_type)' -> 'S(Dot)'
+'S(state0)' -> X('E(machine_type)' | 'E(constant)')
+'S(Constant)' -> GF'S(Constant)'
+'S(state0)' -> X'E(constant)' -> FG true

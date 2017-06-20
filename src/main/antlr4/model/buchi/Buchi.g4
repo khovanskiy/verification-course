@@ -11,14 +11,14 @@ compilationUnit returns [List<State> list]
 {
     $list = new ArrayList<State>();
 }:
-'never' '{' ((stateDefinition {$list.add($stateDefinition.s);})* '}' | empty) EOF;
+'never' '{' (((stateDefinition {$list.add($stateDefinition.s);})* | empty) '}' ) EOF;
 
 stateDefinition returns [State s]
 @init
 {
     List<Transition> list = new ArrayList<>();
 }:
-    stateName ':' ('skip' | ('if' (transition {list.add($transition.t);})+ 'fi' ';'))
+    stateName ':' ('skip' | empty | ('if' (transition {list.add($transition.t);})+ 'fi' ';'))
     {
         String name = $stateName.text;
         $s = new State(name, list);

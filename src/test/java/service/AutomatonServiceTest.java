@@ -91,7 +91,14 @@ public class AutomatonServiceTest {
     }
 
     @Test
-    public void createFromLtlFormula(){
+    public void emptyTransitions() {
+        List<State> states = automatonService.createStateListFromLtl("!true");
+        Assert.assertEquals("States count", 1, states.size());
+        Assert.assertEquals("Transition count", 0, states.get(0).getTransitions().size());
+    }
+
+    @Test
+    public void createFromLtlFormula() {
         Formula<String> ltl = LTL.not(LTL.globally(LTL.future(LTL.var("p"))));
         Automaton<Formula<String>> automaton = automatonService.createFromLtl(ltl);
         Automaton<Formula<String>> reference = new Automaton<>();
@@ -130,7 +137,7 @@ public class AutomatonServiceTest {
         Assert.assertEquals(path, ref);
     }
 
-    private class MyIntersector implements Intersector<Integer>{
+    private class MyIntersector implements Intersector<Integer> {
 
         @Override
         public Integer intersect(Integer a, Integer b) {
