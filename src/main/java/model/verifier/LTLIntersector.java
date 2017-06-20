@@ -48,9 +48,11 @@ public class LTLIntersector<T> implements Intersector<Formula<T>> {
             boolean right = mark;
             if (binary.getOperation() == OR) {
                 mark = left || right;
+                return;
             }
             if (binary.getOperation() == AND) {
                 mark = left && right;
+                return;
             }
             throw new IllegalArgumentException();
         }
