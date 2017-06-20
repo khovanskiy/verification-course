@@ -7,6 +7,9 @@ import java.util.List;
  * @since 1.0.0
  */
 public class State {
+    public static final Integer ORDINARY = 0;
+    public static final Integer INITIAL = 1;
+    public static final Integer FINAL = 2;
     private final String name;
     private final List<Transition> transitions;
 

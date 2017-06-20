@@ -154,9 +154,10 @@ public class AutomatonService {
             if (widget instanceof StateWidget) {
                 StateWidget state = (StateWidget) widget;
                 Integer stateNode = state.getId();
-                if (state.getAttributes().getIncomings() == null) {
+                if (State.INITIAL.equals(state.getAttributes().getType())) {
                     if (initId == null) {
                         initId = ids.getAndIncrement();
+                        automaton.setInitialState(initId);
                     }
                     Formula<String> stateEdge = createFormulaFromState(state);
                     automaton.addTransition(initId, stateNode, stateEdge);
