@@ -39,7 +39,6 @@ extern int tl_verbose, tl_stats, tl_simp_diff;
 Node **label;
 char **sym_table;
 ATrans **transition;
-struct rusage tr_debut, tr_fin;
 struct timeval t_diff;
 int *final_set, node_id = 1, sym_id = 0, node_size, sym_size;
 int astate_count = 0, atrans_count = 0;
@@ -403,7 +402,6 @@ void print_alternating() /* dumps the alternating automaton */
 
 void mk_alternating(Node *p) /* generates an alternating automaton for p */
 {
-  if(tl_stats) getrusage(RUSAGE_SELF, &tr_debut);
 
   node_size = calculate_node_size(p) + 1; /* number of states in the automaton */
   label = (Node **) tl_emalloc(node_size * sizeof(Node *));
@@ -430,13 +428,6 @@ void mk_alternating(Node *p) /* generates an alternating automaton for p */
     }
   }
   
-  if(tl_stats) {
-    getrusage(RUSAGE_SELF, &tr_fin);
-    timeval_subtract (&t_diff, &tr_fin.ru_utime, &tr_debut.ru_utime);
-    fprintf(tl_out, "\nBuilding and simplification of the alternating automaton: %i.%06is",
-		t_diff.tv_sec, t_diff.tv_usec);
-    fprintf(tl_out, "\n%i states, %i transitions\n", astate_count, atrans_count);
-  }
 
   releasenode(1, p);
   tfree(label);
