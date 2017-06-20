@@ -5,7 +5,36 @@ import static model.ltl.BinaryOperation.*;
 }
 
 ltl returns [Formula<String> f]
-    :   NEXT ltl
+    :   
+    |   primary
+    {
+        $f = $primary.f;
+    }
+    |   l=ltl CON r=ltl
+    {
+        $f = LTL.and($l.f, $r.f);
+    }
+    |   l=ltl DIS r=ltl
+    {
+        $f = LTL.or($l.f, $r.f);
+    }
+    |   <assoc=right> l=ltl IMPL r=ltl
+    {
+        $f = LTL.impl($l.f, $r.f);
+    }
+    |   l=ltl EQ r=ltl
+    {
+        $f = LTL.eq($l.f, $r.f);
+    }
+    |   l=ltl RELEASE r=ltl
+    {
+        $f = LTL.release($l.f, $r.f);
+    }
+    |   l=ltl UNTIL r=ltl
+    {
+      $f = LTL.until($l.f, $r.f);
+    }
+    |   NEXT ltl
     {
         $f = LTL.next($ltl.f);
     }
@@ -16,48 +45,6 @@ ltl returns [Formula<String> f]
     |   FUTURE ltl
     {
         $f = LTL.future($ltl.f);
-    }
-    |   binary
-    {
-        $f = $binary.f;
-    }
-    ;
-
-binary returns [Formula<String> f]
-    :   l=binary UNTIL r=binary
-    {
-        $f = LTL.until($l.f, $r.f);
-    }
-    |   l=binary RELEASE r=binary
-    {
-        $f = LTL.release($l.f, $r.f);
-    }
-    |   prop
-    {
-        $f = $prop.f;
-    }
-    ;
-
-prop returns [Formula<String> f]
-    :   l=prop CON r=prop
-    {
-        $f = LTL.and($l.f, $r.f);
-    }
-    |   l=prop DIS r=prop
-    {
-        $f = LTL.or($l.f, $r.f);
-    }
-    |   <assoc=right> l=prop IMPL r=prop
-    {
-        $f = LTL.impl($l.f, $r.f);
-    }
-    |   l=prop EQ r=prop
-    {
-        $f = LTL.eq($l.f, $r.f);
-    }
-    |   primary
-    {
-        $f = $primary.f;
     }
     ;
 
