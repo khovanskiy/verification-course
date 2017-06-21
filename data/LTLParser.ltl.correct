@@ -1,0 +1,3 @@
+true
+'S(state0)' -> FG true
+G(('E(variable)' | 'E(array)') -> F'S(VOC)')
