@@ -35,6 +35,10 @@ public class MainApplication {
             VerifierService verifierService = new VerifierService(automatonService);
             Diagram diagram = diagramService.parseDiagram(modelFile);
             Automaton<Formula<String>> automaton = automatonService.createFromDiagram(diagram);
+            if(ltlScanner == null){
+                System.err.println("");
+                System.exit(1);
+            }
             while(ltlScanner.hasNextLine()){
                 String formula = ltlScanner.nextLine();
                 log.info("Considering the formula " + formula);
@@ -52,7 +56,7 @@ public class MainApplication {
                 }
             }
         } catch (IOException e) {
-            // Option parser exception. Scanner never throws IOException
+            System.err.println(e.getMessage());
             System.exit(1);
         }
     }

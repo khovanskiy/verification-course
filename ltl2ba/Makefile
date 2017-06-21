@@ -29,7 +29,7 @@
 
 CC=clang
 CFLAGS=-O3 -DNXT
-OUTPUT=ltl2ba
+OUTPUT=ltl2ba.exe
 
 LTL2BA=	parse.o lex.o main.o trans.o buchi.o set.o \
 	mem.o rewrt.o cache.o alternating.o generalized.o

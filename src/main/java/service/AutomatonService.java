@@ -76,7 +76,7 @@ public class AutomatonService {
     }
 
     public List<State> createStateListFromLtl(String ltl) {
-        String[] command = new String[]{"ltl2ba/ltl2ba", "-f", ltl};
+        String[] command = new String[]{"ltl2ba/ltl2ba.exe", "-f", ltl};
         return systemService.executeForRead(command, inputStream -> {
             try {
                 String string = StreamUtils.toString(inputStream);
