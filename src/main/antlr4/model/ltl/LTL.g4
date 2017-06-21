@@ -57,9 +57,9 @@ primary returns [Formula<String> f]
     {
         $f = $ltl.f;
     }
-    |   NOT primary
+    |   NOT ltl
     {
-        $f = LTL.not($primary.f);
+        $f = LTL.not($ltl.f);
     }
     ;
 
