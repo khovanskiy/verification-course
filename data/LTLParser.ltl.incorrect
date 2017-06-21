@@ -1,2 +1,3 @@
 false
 G('E(machine_name)' -> F'A(WriteToken)')
+G(('E(see_minus)' | 'E(vertical_line)') -> (F'S(NestedMachine)' | F'S(ForkMachine)'))
