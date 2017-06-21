@@ -1,1 +1,3 @@
 G ('E(machine_type)' -> X G('E(machine_type)' -> X 'S(NameWithArrow)'))
+G('S(FunctionFound)' -> F('A(WriteFunctionProposition)'))
+'S(FunctionFound)' R !'S(FunctionFound)'
