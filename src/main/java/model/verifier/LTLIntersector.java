@@ -18,7 +18,7 @@ public class LTLIntersector<T> implements Intersector<Formula<T>> {
     @Override
     public Formula<T> intersect(Formula<T> a, Formula<T> b) {
         if (a.equals(LTL.t())) {
-            return a;
+            return b.equals(LTL.t()) ? a : null;
         }
         VariableVisitor visitor = new VariableVisitor();
         a.accept(visitor);
