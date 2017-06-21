@@ -1,0 +1,9 @@
+G(('E(a)' | 'E(b)') -> F 'S(sc)')
+G('S(sc)' -> F('S(sc)'))
+'a' | !'a'
+!'a' U 'E(c)'
+G(('E(a)' | 'E(b)') -> X X X 'S(sc)')
+G('S(sc)' -> X X X X X true)
+F('E(a)' | 'E(b)')
+F('E(c)')
+F('S(sb)')

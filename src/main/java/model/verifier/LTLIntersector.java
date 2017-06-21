@@ -3,6 +3,7 @@ package model.verifier;
 import model.buchi.Intersector;
 import model.ltl.*;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,12 +18,12 @@ import static model.ltl.BinaryOperation.OR;
 public class LTLIntersector<T> implements Intersector<Formula<T>> {
     @Override
     public Formula<T> intersect(Formula<T> a, Formula<T> b) {
-        if (a.equals(LTL.t())) {
-            return a;
+        Set<Variable<T>> variables = Collections.emptySet();
+        if (!a.equals(LTL.t())) {
+            VariableVisitor visitor = new VariableVisitor();
+            a.accept(visitor);
+            variables = visitor.getResult();
         }
-        VariableVisitor visitor = new VariableVisitor();
-        a.accept(visitor);
-        Set<Variable<T>> variables = visitor.getResult();
         MarkVisitor markVisitor = new MarkVisitor(variables);
         b.accept(markVisitor);
         return markVisitor.getMark() ? a : null;

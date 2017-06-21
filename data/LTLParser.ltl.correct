@@ -1,3 +1,4 @@
 true
 'S(state0)' -> FG true
 G(('E(variable)' | 'E(array)') -> F'S(VOC)')
+G(('E(see_minus)' | 'E(vertical_line)') -> (F'S(NestedMachine)' | F'S(ForkMachine)' | F'S(NameWithArrow)' | F'S(Fork)'))

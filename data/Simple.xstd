@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diagram>
+  <name>AChart</name>
+  <data>
+    <Statemachine>
+      <event name="a" comment="" />
+      <event name="b" comment="" />
+      <event name="c" comment="" />
+      <autoreject>False</autoreject>
+    </Statemachine>
+  </data>
+  <widget id="0" type="State">
+    <attributes>
+      <name>sa</name>
+      <type>1</type>
+      <outgoing id="3" />
+      <outgoing id="4" />
+    </attributes>
+  </widget>
+    <widget id="1" type="State">
+      <attributes>
+        <name>sb</name>
+        <type>0</type>
+        <incoming id="3" />
+        <incoming id="4" />
+        <outgoing id="5" />
+      </attributes>
+    </widget>
+      <widget id="2" type="State">
+        <attributes>
+          <name>sc</name>
+          <type>0</type>
+          <incoming id="5" />
+        </attributes>
+      </widget>
+  <widget id="3" type="Transition">
+    <attributes>
+      <event name="a" comment="" />
+      <code />
+      <guard></guard>
+    </attributes>
+  </widget>
+    <widget id="4" type="Transition">
+      <attributes>
+        <event name="b" comment="" />
+        <code />
+        <guard></guard>
+      </attributes>
+    </widget>
+      <widget id="5" type="Transition">
+        <attributes>
+          <event name="c" comment="" />
+          <code />
+          <guard></guard>
+        </attributes>
+      </widget>
+
+</diagram>
