@@ -8,7 +8,7 @@
 ## Запуск
 Для запуска программы нужна Oracle JRE 8, которую нужно предварительно установить с сайта http://www.oracle.com/technetwork/java/javase/downloads/index.html и убедиться, что она работает:
 
-> java --version
+> java -version
 
 ### Интерфейс верификатора
 
